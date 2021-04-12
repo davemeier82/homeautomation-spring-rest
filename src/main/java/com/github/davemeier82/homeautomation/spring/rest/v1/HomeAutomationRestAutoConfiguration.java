@@ -20,11 +20,14 @@ import com.github.davemeier82.homeautomation.spring.core.DeviceRegistry;
 import com.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreAutoConfiguration;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceApiService;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceController;
-import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceToDtoMapper;
+import com.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
+import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Set;
 
 @Configuration
 @AutoConfigureAfter(HomeAutomationCoreAutoConfiguration.class)
@@ -41,7 +44,7 @@ public class HomeAutomationRestAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   DeviceApiService deviceApiService(DeviceRegistry deviceRegistry, DeviceToDtoMapper deviceToDtoMapper) {
-    return new DeviceApiService(deviceRegistry, deviceToDtoMapper);
+    return new DeviceApiService(deviceRegistry, deviceToDtoMapper, Set.of(new RelayUpdater()));
   }
 
   @Bean

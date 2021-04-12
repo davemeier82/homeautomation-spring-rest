@@ -16,12 +16,12 @@
 
 package com.github.davemeier82.homeautomation.spring.rest.v1.device;
 
+import com.github.davemeier82.homeautomation.core.device.DeviceId;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestAutoConfiguration.API_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -40,5 +40,15 @@ public class DeviceController {
   public List<DeviceDto> getDevices() {
     return deviceApiService.getDevices();
   }
+
+  @PutMapping(path = "/{deviceId}/{type}/{propertyId}")
+  public void updateDevices(@PathVariable String deviceId,
+                            @PathVariable String type,
+                            @PathVariable long propertyId,
+                            @RequestBody Map<String, Object> body
+  ) {
+    deviceApiService.updateDevice(new DeviceId(deviceId, type), propertyId, body);
+  }
+
 
 }

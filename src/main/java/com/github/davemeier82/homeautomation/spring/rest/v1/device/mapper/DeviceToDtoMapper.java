@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.davemeier82.homeautomation.spring.rest.v1.device;
+package com.github.davemeier82.homeautomation.spring.rest.v1.device.mapper;
 
 import com.github.davemeier82.homeautomation.core.device.Device;
 import com.github.davemeier82.homeautomation.core.device.property.*;
