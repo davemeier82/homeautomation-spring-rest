@@ -21,8 +21,10 @@ import com.github.davemeier82.homeautomation.core.device.property.*;
 import com.github.davemeier82.homeautomation.core.event.DataWithTimestamp;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.dto.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DeviceToDtoMapper {
 
@@ -46,6 +48,8 @@ public class DeviceToDtoMapper {
         propertyDto = map((MotionSensor) property);
       } else if (property instanceof BatteryStateSensor) {
         propertyDto = map((BatteryStateSensor) property);
+      } else if (property instanceof Roller) {
+        propertyDto = map((Roller) property);
       }
       if (propertyDto != null) {
         properties.add(propertyDto);
@@ -54,54 +58,77 @@ public class DeviceToDtoMapper {
     return deviceDto;
   }
 
+  private RollerPropertyDto map(Roller roller) {
+    return new RollerPropertyDto(roller.getId(),
+        getValueOrNull(roller.getState()),
+        getTimestampOrNull(roller.getState()),
+        getValueOrNull(roller.getPositionInPercent()),
+        getTimestampOrNull(roller.getPositionInPercent())
+    );
+  }
+
   public RelayPropertyDto map(Relay relay) {
     return new RelayPropertyDto(
         relay.getId(),
-        relay.isOn().map(DataWithTimestamp::getValue).orElse(null),
-        relay.isOn().map(DataWithTimestamp::getDateTime).orElse(null)
+        getValueOrNull(relay.isOn()),
+        getTimestampOrNull(relay.isOn())
     );
   }
 
   public DimmerPropertyDto map(Dimmer dimmer) {
     return new DimmerPropertyDto(
         dimmer.getId(),
-        dimmer.getDimmingLevelInPercent().map(DataWithTimestamp::getValue).orElse(null),
-        dimmer.getDimmingLevelInPercent().map(DataWithTimestamp::getDateTime).orElse(null));
+        getValueOrNull(dimmer.getDimmingLevelInPercent()),
+        getTimestampOrNull(dimmer.getDimmingLevelInPercent()));
   }
 
   public WindowSensorPropertyDto map(WindowSensor sensor) {
     return new WindowSensorPropertyDto(
         sensor.getId(),
-        sensor.isOpen().map(DataWithTimestamp::getValue).orElse(null),
-        sensor.isOpen().map(DataWithTimestamp::getDateTime).orElse(null),
+        getValueOrNull(sensor.isOpen()),
+        getTimestampOrNull(sensor.isOpen()),
         sensor.isTiltingSupported(),
-        sensor.getTiltAngleInDegree().map(DataWithTimestamp::getValue).orElse(null),
-        sensor.getTiltAngleInDegree().map(DataWithTimestamp::getDateTime).orElse(null));
+        getValueOrNull(sensor.getTiltAngleInDegree()),
+        getTimestampOrNull(sensor.getTiltAngleInDegree())
+    );
   }
 
   public HumiditySensorPropertyDto map(HumiditySensor sensor) {
     return new HumiditySensorPropertyDto(
         sensor.getId(),
-        sensor.getRelativeHumidityInPercent().map(DataWithTimestamp::getValue).orElse(null),
-        sensor.getRelativeHumidityInPercent().map(DataWithTimestamp::getDateTime).orElse(null));
+        getValueOrNull(sensor.getRelativeHumidityInPercent()),
+        getTimestampOrNull(sensor.getRelativeHumidityInPercent())
+    );
   }
 
   public TemperatureSensorPropertyDto map(TemperatureSensor sensor) {
     return new TemperatureSensorPropertyDto(
         sensor.getId(),
-        sensor.getTemperatureInDegree().map(DataWithTimestamp::getValue).orElse(null),
-        sensor.getTemperatureInDegree().map(DataWithTimestamp::getDateTime).orElse(null));
+        getValueOrNull(sensor.getTemperatureInDegree()),
+        getTimestampOrNull(sensor.getTemperatureInDegree())
+    );
   }
 
   public BatteryStateSensorPropertyDto map(BatteryStateSensor sensor) {
     return new BatteryStateSensorPropertyDto(
         sensor.getId(),
-        sensor.batteryLevelInPercent().map(DataWithTimestamp::getValue).orElse(null),
-        sensor.batteryLevelInPercent().map(DataWithTimestamp::getDateTime).orElse(null));
+        getValueOrNull(sensor.batteryLevelInPercent()),
+        getTimestampOrNull(sensor.batteryLevelInPercent())
+    );
   }
 
   public MotionSensorPropertyDto map(MotionSensor sensor) {
     return new MotionSensorPropertyDto(sensor.getId(), sensor.getLastMotionDetected().orElse(null));
+  }
+
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+  private <T> T getValueOrNull(Optional<DataWithTimestamp<T>> dataWithTimestamp) {
+    return dataWithTimestamp.map(DataWithTimestamp::getValue).orElse(null);
+  }
+
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+  private <T> ZonedDateTime getTimestampOrNull(Optional<DataWithTimestamp<T>> dataWithTimestamp) {
+    return dataWithTimestamp.map(DataWithTimestamp::getDateTime).orElse(null);
   }
 
 }
