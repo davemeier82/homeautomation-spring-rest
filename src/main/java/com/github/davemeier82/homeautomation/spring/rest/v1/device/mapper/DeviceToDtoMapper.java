@@ -50,6 +50,8 @@ public class DeviceToDtoMapper {
         propertyDto = map((BatteryStateSensor) property);
       } else if (property instanceof Roller) {
         propertyDto = map((Roller) property);
+      } else if (property instanceof PowerSensor) {
+        propertyDto = map((PowerSensor) property);
       }
       if (propertyDto != null) {
         properties.add(propertyDto);
@@ -114,6 +116,14 @@ public class DeviceToDtoMapper {
         sensor.getId(),
         getValueOrNull(sensor.batteryLevelInPercent()),
         getTimestampOrNull(sensor.batteryLevelInPercent())
+    );
+  }
+
+  public PowerSensorPropertyDto map(PowerSensor sensor) {
+    return new PowerSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getWatt()),
+        getTimestampOrNull(sensor.getWatt())
     );
   }
 
