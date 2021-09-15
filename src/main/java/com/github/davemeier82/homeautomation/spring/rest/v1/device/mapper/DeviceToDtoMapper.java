@@ -37,7 +37,7 @@ public class DeviceToDtoMapper {
       if (property instanceof Dimmer) {
         propertyDto = map((Dimmer) property);
       } else if (property instanceof Relay) {
-        propertyDto = map((Relay) property);
+        propertyDto = map((ReadOnlyRelay) property);
       } else if (property instanceof WindowSensor) {
         propertyDto = map((WindowSensor) property);
       } else if (property instanceof TemperatureSensor) {
@@ -69,7 +69,7 @@ public class DeviceToDtoMapper {
     );
   }
 
-  public RelayPropertyDto map(Relay relay) {
+  public RelayPropertyDto map(ReadOnlyRelay relay) {
     return new RelayPropertyDto(
         relay.getId(),
         getValueOrNull(relay.isOn()),
