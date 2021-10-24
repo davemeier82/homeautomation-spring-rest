@@ -50,7 +50,7 @@ public class DeviceApiService {
     return deviceRegistry.getDevices().stream()
         .sorted(comparing(Device::getId))
         .map(deviceToDtoMapper::map)
-        .collect(toList());
+        .toList();
   }
 
   public void updateDevice(DeviceId deviceId, long propertyId, Map<String, Object> body) {
