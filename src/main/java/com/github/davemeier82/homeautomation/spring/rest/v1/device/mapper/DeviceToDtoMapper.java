@@ -34,24 +34,26 @@ public class DeviceToDtoMapper {
 
     for (DeviceProperty property : device.getDeviceProperties()) {
       DevicePropertyDto propertyDto = null;
-      if (property instanceof Dimmer) {
-        propertyDto = map((Dimmer) property);
-      } else if (property instanceof Relay) {
-        propertyDto = map((ReadOnlyRelay) property);
-      } else if (property instanceof WindowSensor) {
-        propertyDto = map((WindowSensor) property);
-      } else if (property instanceof TemperatureSensor) {
-        propertyDto = map((TemperatureSensor) property);
-      } else if (property instanceof HumiditySensor) {
-        propertyDto = map((HumiditySensor) property);
-      } else if (property instanceof MotionSensor) {
-        propertyDto = map((MotionSensor) property);
-      } else if (property instanceof BatteryStateSensor) {
-        propertyDto = map((BatteryStateSensor) property);
-      } else if (property instanceof Roller) {
-        propertyDto = map((Roller) property);
-      } else if (property instanceof PowerSensor) {
-        propertyDto = map((PowerSensor) property);
+      if (property instanceof Dimmer dimmer) {
+        propertyDto = map(dimmer);
+      } else if (property instanceof Relay relay) {
+        propertyDto = map(relay);
+      } else if (property instanceof WindowSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof TemperatureSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof HumiditySensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof MotionSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof BatteryStateSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof Roller roller) {
+        propertyDto = map(roller);
+      } else if (property instanceof PowerSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof IlluminanceSensor sensor) {
+        propertyDto = map(sensor);
       }
       if (propertyDto != null) {
         properties.add(propertyDto);
@@ -124,6 +126,14 @@ public class DeviceToDtoMapper {
         sensor.getId(),
         getValueOrNull(sensor.getWatt()),
         getTimestampOrNull(sensor.getWatt())
+    );
+  }
+
+  public IlluminanceSensorPropertyDto map(IlluminanceSensor sensor) {
+    return new IlluminanceSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getLux()),
+        getTimestampOrNull(sensor.getLux())
     );
   }
 
