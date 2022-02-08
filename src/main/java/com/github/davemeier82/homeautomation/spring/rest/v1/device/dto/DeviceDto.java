@@ -17,6 +17,7 @@
 package com.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class DeviceDto {
 
@@ -24,17 +25,20 @@ public class DeviceDto {
   private final String id;
   private final String displayName;
   private final List<DevicePropertyDto> properties;
+  private final Map<String, String> customIdentifiers;
 
 
   public DeviceDto(String type,
                    String id,
                    String displayName,
-                   List<DevicePropertyDto> properties
+                   List<DevicePropertyDto> properties,
+                   Map<String, String> identifiers
   ) {
     this.type = type;
     this.id = id;
     this.displayName = displayName;
     this.properties = properties;
+    customIdentifiers = identifiers;
   }
 
   public String getType() {
@@ -51,5 +55,9 @@ public class DeviceDto {
 
   public List<DevicePropertyDto> getProperties() {
     return properties;
+  }
+
+  public Map<String, String> getCustomIdentifiers() {
+    return customIdentifiers;
   }
 }

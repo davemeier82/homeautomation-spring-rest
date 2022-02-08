@@ -30,7 +30,7 @@ public class DeviceToDtoMapper {
 
   public DeviceDto map(Device device) {
     List<DevicePropertyDto> properties = new ArrayList<>();
-    DeviceDto deviceDto = new DeviceDto(device.getType(), device.getId(), device.getDisplayName(), properties);
+    DeviceDto deviceDto = new DeviceDto(device.getType(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers());
 
     for (DeviceProperty property : device.getDeviceProperties()) {
       DevicePropertyDto propertyDto = null;

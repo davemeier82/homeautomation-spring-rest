@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
 
 public class DeviceApiService {
 
