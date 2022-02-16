@@ -41,7 +41,7 @@ public class DeviceController {
     return deviceApiService.getDevices();
   }
 
-  @PutMapping(path = "/{deviceIds}/{type}/{propertyId}")
+  @PutMapping(path = "/{deviceId}/{type}/{propertyId}")
   public void updateDevices(@PathVariable String deviceId,
                             @PathVariable String type,
                             @PathVariable long propertyId,
