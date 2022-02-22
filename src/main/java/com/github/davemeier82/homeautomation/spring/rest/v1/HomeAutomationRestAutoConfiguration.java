@@ -23,6 +23,9 @@ import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceControl
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
+import com.github.davemeier82.homeautomation.spring.rest.v1.event.EventApiService;
+import com.github.davemeier82.homeautomation.spring.rest.v1.event.EventController;
+import com.github.davemeier82.homeautomation.spring.rest.v1.event.mapper.EventToDtoMapper;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -52,5 +55,23 @@ public class HomeAutomationRestAutoConfiguration {
   @ConditionalOnMissingBean
   DeviceController deviceController(DeviceApiService deviceApiService) {
     return new DeviceController(deviceApiService);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  EventToDtoMapper eventToDtoMapper() {
+    return new EventToDtoMapper();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  EventApiService eventApiService(EventToDtoMapper eventToDtoMapper) {
+    return new EventApiService(eventToDtoMapper);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  EventController eventController(EventApiService eventApiService) {
+    return new EventController(eventApiService);
   }
 }
