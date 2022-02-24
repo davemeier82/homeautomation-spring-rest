@@ -18,9 +18,7 @@ package com.github.davemeier82.homeautomation.spring.rest.v1.event.mapper;
 
 import com.github.davemeier82.homeautomation.core.device.Device;
 import com.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
-import com.github.davemeier82.homeautomation.core.event.DataWithTimestamp;
-import com.github.davemeier82.homeautomation.core.event.DevicePropertyEvent;
-import com.github.davemeier82.homeautomation.core.event.RelayStateChangedEvent;
+import com.github.davemeier82.homeautomation.core.event.*;
 import com.github.davemeier82.homeautomation.spring.rest.v1.event.EventDto;
 
 public class EventToDtoMapper {
@@ -39,8 +37,56 @@ public class EventToDtoMapper {
           previousValue == null ? null : previousValue.getValue(),
           on == null ? null : on.getDateTime(),
           previousValue == null ? null : previousValue.getDateTime());
+    } else if (event instanceof TemperatureChangedEvent temperatureChangedEvent) {
+      DataWithTimestamp<Float> previousValue = temperatureChangedEvent.getPreviousValue();
+      DataWithTimestamp<Float> on = temperatureChangedEvent.getTemperatureInDegree();
+      return toFloatEvent(deviceProperty, device, previousValue, on, "TemperatureSensor");
+    } else if (event instanceof HumidityChangedEvent humidityChangedEvent) {
+      DataWithTimestamp<Float> previousValue = humidityChangedEvent.getPreviousValue();
+      DataWithTimestamp<Float> on = humidityChangedEvent.getRelativeHumidityInPercent();
+      return toFloatEvent(deviceProperty, device, previousValue, on, "HumiditySensor");
+    } else if (event instanceof DimmingLevelChangedEvent dimmingLevelChangedEvent) {
+      DataWithTimestamp<Integer> previousValue = dimmingLevelChangedEvent.getPreviousValue();
+      DataWithTimestamp<Integer> on = dimmingLevelChangedEvent.getDimmingLevelInPercent();
+      return toIntEvent(deviceProperty, device, previousValue, on, "Dimmer");
+    } else if (event instanceof IlluminanceChangedEvent humidityChangedEvent) {
+      DataWithTimestamp<Integer> previousValue = humidityChangedEvent.getPreviousValue();
+      DataWithTimestamp<Integer> on = humidityChangedEvent.getLux();
+      return toIntEvent(deviceProperty, device, previousValue, on, "IlluminanceSensor");
     }
 
     return null;
+  }
+
+  private EventDto<Float> toFloatEvent(DeviceProperty deviceProperty,
+                                       Device device,
+                                       DataWithTimestamp<Float> previousValue,
+                                       DataWithTimestamp<Float> on,
+                                       String propertyType
+  ) {
+    return new EventDto<>(device.getType(),
+        device.getId(),
+        propertyType,
+        deviceProperty.getId(),
+        on == null ? null : on.getValue(),
+        previousValue == null ? null : previousValue.getValue(),
+        on == null ? null : on.getDateTime(),
+        previousValue == null ? null : previousValue.getDateTime());
+  }
+
+  private EventDto<Integer> toIntEvent(DeviceProperty deviceProperty,
+                                       Device device,
+                                       DataWithTimestamp<Integer> previousValue,
+                                       DataWithTimestamp<Integer> on,
+                                       String propertyType
+  ) {
+    return new EventDto<>(device.getType(),
+        device.getId(),
+        propertyType,
+        deviceProperty.getId(),
+        on == null ? null : on.getValue(),
+        previousValue == null ? null : previousValue.getValue(),
+        on == null ? null : on.getDateTime(),
+        previousValue == null ? null : previousValue.getDateTime());
   }
 }
