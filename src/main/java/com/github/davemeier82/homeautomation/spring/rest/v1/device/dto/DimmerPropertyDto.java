@@ -18,16 +18,18 @@ package com.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 
 import java.time.ZonedDateTime;
 
-public class DimmerPropertyDto extends DevicePropertyDto {
+public class DimmerPropertyDto extends RelayPropertyDto {
   private final Integer dimmingLevelInPercent;
   private final ZonedDateTime dimmingLevelLastUpdated;
 
 
   public DimmerPropertyDto(long id,
+                           Boolean isOn,
+                           ZonedDateTime lastUpdated,
                            Integer dimmingLevelInPercent,
                            ZonedDateTime dimmingLevelLastUpdated
   ) {
-    super(id, "Dimmer");
+    super(id, "Dimmer", isOn, lastUpdated);
     this.dimmingLevelInPercent = dimmingLevelInPercent;
     this.dimmingLevelLastUpdated = dimmingLevelLastUpdated;
   }

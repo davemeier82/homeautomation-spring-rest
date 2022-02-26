@@ -82,6 +82,8 @@ public class DeviceToDtoMapper {
   public DimmerPropertyDto map(Dimmer dimmer) {
     return new DimmerPropertyDto(
         dimmer.getId(),
+        getValueOrNull(dimmer.isOn()),
+        getTimestampOrNull(dimmer.isOn()),
         getValueOrNull(dimmer.getDimmingLevelInPercent()),
         getTimestampOrNull(dimmer.getDimmingLevelInPercent()));
   }
