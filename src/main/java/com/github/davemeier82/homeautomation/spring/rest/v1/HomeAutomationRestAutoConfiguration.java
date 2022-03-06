@@ -21,6 +21,7 @@ import com.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreAutoC
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceApiService;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceController;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
+import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DimmerUpdater;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import com.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
 import com.github.davemeier82.homeautomation.spring.rest.v1.event.EventApiService;
@@ -48,7 +49,7 @@ public class HomeAutomationRestAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   DeviceApiService deviceApiService(DeviceRegistry deviceRegistry, DeviceToDtoMapper deviceToDtoMapper) {
-    return new DeviceApiService(deviceRegistry, deviceToDtoMapper, Set.of(new RelayUpdater(), new RollerUpdater()));
+    return new DeviceApiService(deviceRegistry, deviceToDtoMapper, Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater()));
   }
 
   @Bean
