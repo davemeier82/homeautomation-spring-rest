@@ -56,10 +56,9 @@ public class DeviceApiService {
     DeviceProperty deviceProperty = deviceRegistry.getByDeviceId(deviceId).orElseThrow().getDeviceProperties()
         .stream().filter(property -> property.getId() == propertyId)
         .findAny().orElseThrow();
-    DevicePropertyUpdater devicePropertyUpdater = devicePropertyUpdaters.stream()
+    devicePropertyUpdaters.stream()
         .filter(updater -> updater.isSupported(deviceProperty))
-        .findAny().orElseThrow();
-    devicePropertyUpdater.update(deviceProperty, body);
+        .forEach(updater -> updater.update(deviceProperty, body));
   }
 
 }
