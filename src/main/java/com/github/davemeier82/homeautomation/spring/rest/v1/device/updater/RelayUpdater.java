@@ -16,13 +16,16 @@
 
 package com.github.davemeier82.homeautomation.spring.rest.v1.device.updater;
 
+import com.github.davemeier82.homeautomation.core.device.DeviceId;
 import com.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import com.github.davemeier82.homeautomation.core.device.property.Relay;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class RelayUpdater implements DevicePropertyUpdater {
-
+  private static final Logger log = LoggerFactory.getLogger(RelayUpdater.class);
 
   @Override
   public boolean isSupported(DeviceProperty deviceProperty) {
@@ -34,6 +37,7 @@ public class RelayUpdater implements DevicePropertyUpdater {
     Relay relay = (Relay) deviceProperty;
     Boolean on = (Boolean) body.get("on");
     if (on != null) {
+      log.debug("switch relay {} with propertyId {} to {}", DeviceId.deviceIdFromDevice(deviceProperty.getDevice()), deviceProperty.getId(), on);
       if (on) {
         relay.turnOn();
       } else {

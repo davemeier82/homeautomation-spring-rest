@@ -16,13 +16,16 @@
 
 package com.github.davemeier82.homeautomation.spring.rest.v1.device.updater;
 
+import com.github.davemeier82.homeautomation.core.device.DeviceId;
 import com.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import com.github.davemeier82.homeautomation.core.device.property.Roller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class RollerUpdater implements DevicePropertyUpdater {
-
+  private static final Logger log = LoggerFactory.getLogger(RollerUpdater.class);
 
   @Override
   public boolean isSupported(DeviceProperty deviceProperty) {
@@ -34,22 +37,25 @@ public class RollerUpdater implements DevicePropertyUpdater {
     Roller roller = (Roller) deviceProperty;
     String state = (String) body.get("state");
     if (state != null) {
+      log.debug("set roller state of {} with propertyId {} to {}",
+          DeviceId.deviceIdFromDevice(deviceProperty.getDevice()),
+          deviceProperty.getId(),
+          state);
       switch (state.toLowerCase()) {
-        case "open":
-          roller.open();
-          break;
-        case "close":
-          roller.close();
-          break;
-        case "stop":
-          roller.stop();
-          break;
-        default:
+        case "open" -> roller.open();
+        case "close" -> roller.close();
+        case "stop" -> roller.stop();
+        default -> {
           // do nothing
+        }
       }
     }
     Integer position = (Integer) body.get("position");
     if (position != null) {
+      log.debug("set roller position of {} with propertyId {} to {}",
+          DeviceId.deviceIdFromDevice(deviceProperty.getDevice()),
+          deviceProperty.getId(),
+          position);
       roller.setPosition(position);
     }
   }

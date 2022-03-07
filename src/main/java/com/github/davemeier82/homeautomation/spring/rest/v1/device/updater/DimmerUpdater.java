@@ -16,13 +16,16 @@
 
 package com.github.davemeier82.homeautomation.spring.rest.v1.device.updater;
 
+import com.github.davemeier82.homeautomation.core.device.DeviceId;
 import com.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import com.github.davemeier82.homeautomation.core.device.property.Dimmer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class DimmerUpdater implements DevicePropertyUpdater {
-
+  private static final Logger log = LoggerFactory.getLogger(DimmerUpdater.class);
 
   @Override
   public boolean isSupported(DeviceProperty deviceProperty) {
@@ -34,6 +37,10 @@ public class DimmerUpdater implements DevicePropertyUpdater {
     Dimmer dimmer = (Dimmer) deviceProperty;
     Integer dimmingLevel = (Integer) body.get("dimmingLevel");
     if (dimmingLevel != null) {
+      log.debug("change dimming level of {} with propertyId {} to {}",
+          DeviceId.deviceIdFromDevice(deviceProperty.getDevice()),
+          deviceProperty.getId(),
+          dimmingLevel);
       dimmer.setDimmingLevel(dimmingLevel);
     }
   }
