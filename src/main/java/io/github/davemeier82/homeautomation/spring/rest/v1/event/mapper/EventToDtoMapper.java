@@ -22,69 +22,62 @@ import io.github.davemeier82.homeautomation.core.device.property.RollerState;
 import io.github.davemeier82.homeautomation.core.event.*;
 import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventDto;
 
+import java.util.Optional;
+
 public class EventToDtoMapper {
 
   public EventDto<?> map(DevicePropertyEvent event) {
     DeviceProperty deviceProperty = event.getDeviceProperty();
     Device device = deviceProperty.getDevice();
     if (event instanceof RelayStateChangedEvent relayEvent) {
-      DataWithTimestamp<Boolean> previousValue = relayEvent.getPreviousValue();
       DataWithTimestamp<Boolean> on = relayEvent.isOn();
-      return toEvent(deviceProperty, device, previousValue, on, "RelayStateChangedEvent");
+      return toEvent(deviceProperty, device, relayEvent.getPreviousValue(), on, "RelayStateChangedEvent");
     } else if (event instanceof TemperatureChangedEvent temperatureChangedEvent) {
-      DataWithTimestamp<Float> previousValue = temperatureChangedEvent.getPreviousValue();
       DataWithTimestamp<Float> on = temperatureChangedEvent.getTemperatureInDegree();
-      return toEvent(deviceProperty, device, previousValue, on, "TemperatureChangedEvent");
+      return toEvent(deviceProperty, device, temperatureChangedEvent.getPreviousValue(), on, "TemperatureChangedEvent");
     } else if (event instanceof HumidityChangedEvent humidityChangedEvent) {
-      DataWithTimestamp<Float> previousValue = humidityChangedEvent.getPreviousValue();
       DataWithTimestamp<Float> on = humidityChangedEvent.getRelativeHumidityInPercent();
-      return toEvent(deviceProperty, device, previousValue, on, "HumidityChangedEvent");
+      return toEvent(deviceProperty, device, humidityChangedEvent.getPreviousValue(), on, "HumidityChangedEvent");
     } else if (event instanceof DimmingLevelChangedEvent dimmingLevelChangedEvent) {
-      DataWithTimestamp<Integer> previousValue = dimmingLevelChangedEvent.getPreviousValue();
       DataWithTimestamp<Integer> on = dimmingLevelChangedEvent.getDimmingLevelInPercent();
-      return toEvent(deviceProperty, device, previousValue, on, "DimmingLevelChangedEvent");
+      return toEvent(deviceProperty, device, dimmingLevelChangedEvent.getPreviousValue(), on, "DimmingLevelChangedEvent");
     } else if (event instanceof IlluminanceChangedEvent humidityChangedEvent) {
-      DataWithTimestamp<Integer> previousValue = humidityChangedEvent.getPreviousValue();
       DataWithTimestamp<Integer> on = humidityChangedEvent.getLux();
-      return toEvent(deviceProperty, device, previousValue, on, "IlluminanceChangedEvent");
+      return toEvent(deviceProperty, device, humidityChangedEvent.getPreviousValue(), on, "IlluminanceChangedEvent");
     } else if (event instanceof RollerStateChangedEvent rollerStateChangedEvent) {
-      DataWithTimestamp<RollerState> previousValue = rollerStateChangedEvent.getPreviousState();
       DataWithTimestamp<RollerState> on = rollerStateChangedEvent.getState();
-      return toEvent(deviceProperty, device, previousValue, on, "RollerStateChangedEvent");
+      return toEvent(deviceProperty, device, rollerStateChangedEvent.getPreviousValue(), on, "RollerStateChangedEvent");
     } else if (event instanceof RollerPositionChangedEvent rollerPositionChangedEvent) {
-      DataWithTimestamp<Integer> previousValue = rollerPositionChangedEvent.getPreviousValue();
       DataWithTimestamp<Integer> on = rollerPositionChangedEvent.getPositionInPercent();
-      return toEvent(deviceProperty, device, previousValue, on, "RollerPositionChangedEvent");
+      return toEvent(deviceProperty, device, rollerPositionChangedEvent.getPreviousValue(), on, "RollerPositionChangedEvent");
     } else if (event instanceof BatteryLevelChangedEvent batteryLevelChangedEvent) {
-      DataWithTimestamp<Integer> previousValue = batteryLevelChangedEvent.getPreviousValue();
       DataWithTimestamp<Integer> on = batteryLevelChangedEvent.getBatteryLevelInPercent();
-      return toEvent(deviceProperty, device, previousValue, on, "BatteryLevelChangedEvent");
+      return toEvent(deviceProperty, device, batteryLevelChangedEvent.getPreviousValue(), on, "BatteryLevelChangedEvent");
     } else if (event instanceof PowerChangedEvent powerChangedEvent) {
-      DataWithTimestamp<Double> previousValue = powerChangedEvent.getPreviousValue();
       DataWithTimestamp<Double> on = powerChangedEvent.getWatt();
-      return toEvent(deviceProperty, device, previousValue, on, "PowerChangedEvent");
+      return toEvent(deviceProperty, device, powerChangedEvent.getPreviousValue(), on, "PowerChangedEvent");
     } else if (event instanceof WindowStateChangedEvent windowStateChangedEvent) {
-      DataWithTimestamp<Boolean> previousValue = windowStateChangedEvent.getPreviousValue();
       DataWithTimestamp<Boolean> on = windowStateChangedEvent.isOpen();
-      return toEvent(deviceProperty, device, previousValue, on, "WindowStateChangedEvent");
+      return toEvent(deviceProperty, device, windowStateChangedEvent.getPreviousValue(), on, "WindowStateChangedEvent");
     }
 
     return null;
   }
 
+  @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "unchecked"})
   private <T> EventDto<T> toEvent(DeviceProperty deviceProperty,
                                   Device device,
-                                  DataWithTimestamp<T> previousValue,
-                                  DataWithTimestamp<T> on,
+                                  Optional<DataWithTimestamp<?>> previousValue,
+                                  DataWithTimestamp<T> value,
                                   String propertyType
   ) {
     return new EventDto<>(device.getType(),
         device.getId(),
         propertyType,
         deviceProperty.getId(),
-        on == null ? null : on.getValue(),
-        previousValue == null ? null : previousValue.getValue(),
-        on == null ? null : on.getDateTime(),
-        previousValue == null ? null : previousValue.getDateTime());
+        value == null ? null : value.getValue(),
+        (T) previousValue.map(DataWithTimestamp::getValue).orElse(null),
+        value == null ? null : value.getDateTime(),
+        previousValue.map(DataWithTimestamp::getDateTime).orElse(null));
   }
 }

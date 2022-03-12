@@ -19,14 +19,20 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 import java.time.ZonedDateTime;
 
 public class MotionSensorPropertyDto extends DevicePropertyDto {
-  private final ZonedDateTime lastMotionDetected;
+  private final Boolean motionDetected;
+  private final ZonedDateTime lastUpdated;
 
-  public MotionSensorPropertyDto(long id, ZonedDateTime lastMotionDetected) {
+  public MotionSensorPropertyDto(long id, Boolean motionDetected, ZonedDateTime lastUpdated) {
     super(id, "MotionSensor");
-    this.lastMotionDetected = lastMotionDetected;
+    this.motionDetected = motionDetected;
+    this.lastUpdated = lastUpdated;
   }
 
-  public ZonedDateTime getLastMotionDetected() {
-    return lastMotionDetected;
+  public Boolean getMotionDetected() {
+    return motionDetected;
+  }
+
+  public ZonedDateTime getLastUpdated() {
+    return lastUpdated;
   }
 }
