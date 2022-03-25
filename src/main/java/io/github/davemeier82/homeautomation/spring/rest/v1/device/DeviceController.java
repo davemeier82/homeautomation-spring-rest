@@ -18,6 +18,7 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device;
 
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,14 @@ import java.util.Map;
 import static io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestAutoConfiguration.API_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RestController
+/**
+ * REST Controller to retrieve and update {@link io.github.davemeier82.homeautomation.core.device.Device}'s.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
+@ResponseBody
+@ConditionalOnMissingBean
 @RequestMapping(API_PATH + "devices")
 public class DeviceController {
 
@@ -36,11 +44,22 @@ public class DeviceController {
     this.deviceApiService = deviceApiService;
   }
 
+  /**
+   * @return all devices
+   */
   @GetMapping(produces = APPLICATION_JSON_VALUE)
   public List<DeviceDto> getDevices() {
     return deviceApiService.getDevices();
   }
 
+  /**
+   * Updates device properties
+   *
+   * @param deviceId   the device id
+   * @param type       the device type
+   * @param propertyId the device property id
+   * @param body       the body depends on the property type (see {@link io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater})
+   */
   @PutMapping(path = "/{deviceId}/{type}/{propertyId}")
   public void updateDevices(@PathVariable String deviceId,
                             @PathVariable String type,

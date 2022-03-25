@@ -30,6 +30,12 @@ import java.util.Set;
 
 import static java.util.Comparator.comparing;
 
+/**
+ * API Service to handle API requests.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class DeviceApiService {
 
   private final DeviceRegistry deviceRegistry;
@@ -45,6 +51,9 @@ public class DeviceApiService {
     this.devicePropertyUpdaters = devicePropertyUpdaters;
   }
 
+  /**
+   * @return all devices as DTO
+   */
   public List<DeviceDto> getDevices() {
     return deviceRegistry.getDevices().stream()
         .sorted(comparing(Device::getId))
@@ -52,6 +61,13 @@ public class DeviceApiService {
         .toList();
   }
 
+  /**
+   * Updates a property of a device.
+   *
+   * @param deviceId   the device id
+   * @param propertyId the device property id
+   * @param body       the body depends on the property type (see {@link io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater})
+   */
   public void updateDevice(DeviceId deviceId, long propertyId, Map<String, Object> body) {
     DeviceProperty deviceProperty = deviceRegistry.getByDeviceId(deviceId).orElseThrow().getDeviceProperties()
         .stream().filter(property -> property.getId() == propertyId)

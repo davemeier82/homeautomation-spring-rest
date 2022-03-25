@@ -34,6 +34,12 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
+/**
+ * Auto configuration.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 @Configuration
 @AutoConfigureAfter(HomeAutomationCoreAutoConfiguration.class)
 public class HomeAutomationRestAutoConfiguration {

@@ -26,6 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Maps {@link Device} to {@link DeviceDto}.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class DeviceToDtoMapper {
 
   public DeviceDto map(Device device) {

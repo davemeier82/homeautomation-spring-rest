@@ -20,12 +20,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Flux;
 
 import static io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestAutoConfiguration.API_PATH;
 
-@RestController
+/**
+ * REST Controller to stream events (SSE).
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
+@ResponseBody
 @RequestMapping(API_PATH + "events")
 public class EventController {
 

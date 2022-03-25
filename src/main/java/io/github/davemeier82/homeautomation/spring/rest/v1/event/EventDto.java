@@ -18,6 +18,12 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.event;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Payload of the event streaming.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class EventDto<T> {
 
   private final String type;

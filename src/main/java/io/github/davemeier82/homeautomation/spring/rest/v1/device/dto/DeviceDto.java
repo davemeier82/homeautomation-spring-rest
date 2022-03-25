@@ -19,6 +19,10 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class DeviceDto {
 
   private final String type;

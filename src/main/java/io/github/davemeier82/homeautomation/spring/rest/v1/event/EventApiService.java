@@ -29,6 +29,12 @@ import java.time.Duration;
 
 import static reactor.core.publisher.Sinks.EmitResult.*;
 
+/**
+ * API Service that maps Spring events to {@link EventDto}'s.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class EventApiService {
   private static final Logger log = LoggerFactory.getLogger(EventApiService.class);
   private final Sinks.Many<EventDto<?>> devicePropertyEventSink = Sinks.many().multicast().directBestEffort();
@@ -38,6 +44,9 @@ public class EventApiService {
     this.eventToDtoMapper = eventToDtoMapper;
   }
 
+  /**
+   * @return an event SSE stream.
+   */
   public Flux<ServerSentEvent<?>> streamEvents() {
     return Flux.merge(devicePropertyEventSink.asFlux()
             .map(dto -> ServerSentEvent.builder(dto).build()),

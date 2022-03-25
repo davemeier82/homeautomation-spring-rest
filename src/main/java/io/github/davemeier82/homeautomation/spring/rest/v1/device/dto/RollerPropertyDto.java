@@ -20,6 +20,10 @@ import io.github.davemeier82.homeautomation.core.device.property.RollerState;
 
 import java.time.ZonedDateTime;
 
+/**
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class RollerPropertyDto extends DevicePropertyDto {
   private final RollerState state;
   private final ZonedDateTime stateLastUpdated;

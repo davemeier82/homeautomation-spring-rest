@@ -18,6 +18,10 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 
 import java.time.ZonedDateTime;
 
+/**
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class PowerSensorPropertyDto extends DevicePropertyDto {
   private final Double watt;
   private final ZonedDateTime lastUpdated;

@@ -24,6 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Updates the state of a {@link Relay}.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class RelayUpdater implements DevicePropertyUpdater {
   private static final Logger log = LoggerFactory.getLogger(RelayUpdater.class);
 
@@ -32,6 +38,12 @@ public class RelayUpdater implements DevicePropertyUpdater {
     return deviceProperty instanceof Relay;
   }
 
+  /**
+   * Updates the state of a {@link Relay}.
+   *
+   * @param deviceProperty the property to update
+   * @param body           needs to contain the attribute 'on'
+   */
   @Override
   public void update(DeviceProperty deviceProperty, Map<String, Object> body) {
     Relay relay = (Relay) deviceProperty;

@@ -20,8 +20,18 @@ import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 
 import java.util.Map;
 
+/**
+ * Updates a property of a device.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public interface DevicePropertyUpdater {
 
+  /**
+   * @param deviceProperty the property to check
+   * @return true if the property is supported by this updater
+   */
   boolean isSupported(DeviceProperty deviceProperty);
 
   void update(DeviceProperty deviceProperty, Map<String, Object> body);

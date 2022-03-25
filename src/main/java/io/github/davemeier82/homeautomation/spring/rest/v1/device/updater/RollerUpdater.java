@@ -24,6 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Updates the state of a {@link Roller}.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class RollerUpdater implements DevicePropertyUpdater {
   private static final Logger log = LoggerFactory.getLogger(RollerUpdater.class);
 
@@ -32,6 +38,12 @@ public class RollerUpdater implements DevicePropertyUpdater {
     return deviceProperty instanceof Roller;
   }
 
+  /**
+   * Updates the state of a {@link Roller}.
+   *
+   * @param deviceProperty the property to update
+   * @param body           needs to contain the attribute 'state' or 'position'
+   */
   @Override
   public void update(DeviceProperty deviceProperty, Map<String, Object> body) {
     Roller roller = (Roller) deviceProperty;

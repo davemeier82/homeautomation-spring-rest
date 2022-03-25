@@ -24,6 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Updates the dimming level of a {@link Dimmer}.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class DimmerUpdater implements DevicePropertyUpdater {
   private static final Logger log = LoggerFactory.getLogger(DimmerUpdater.class);
 
@@ -32,6 +38,12 @@ public class DimmerUpdater implements DevicePropertyUpdater {
     return deviceProperty instanceof Dimmer;
   }
 
+  /**
+   * Updates the dimming level of a {@link Dimmer}.
+   *
+   * @param deviceProperty the property to update
+   * @param body           needs to contain the attribute 'dimmingLevel'
+   */
   @Override
   public void update(DeviceProperty deviceProperty, Map<String, Object> body) {
     Dimmer dimmer = (Dimmer) deviceProperty;

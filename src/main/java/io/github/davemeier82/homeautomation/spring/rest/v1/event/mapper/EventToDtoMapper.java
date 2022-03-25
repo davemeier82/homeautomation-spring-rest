@@ -24,6 +24,12 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventDto;
 
 import java.util.Optional;
 
+/**
+ * Maps {@link DevicePropertyEvent} to {@link EventDto}.
+ *
+ * @author David Meier
+ * @since 0.1.0
+ */
 public class EventToDtoMapper {
 
   public EventDto<?> map(DevicePropertyEvent event) {
