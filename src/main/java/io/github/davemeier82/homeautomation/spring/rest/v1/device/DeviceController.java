@@ -17,14 +17,18 @@
 package io.github.davemeier82.homeautomation.spring.rest.v1.device;
 
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
+import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfig;
+import io.github.davemeier82.homeautomation.spring.core.config.device.DevicesConfig;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
 
 import static io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestAutoConfiguration.API_PATH;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
@@ -69,5 +73,51 @@ public class DeviceController {
     deviceApiService.updateDevice(new DeviceId(deviceId, type), propertyId, body);
   }
 
+  /**
+   * @return the config of all devices
+   */
+  @GetMapping(path = "/config", produces = APPLICATION_JSON_VALUE)
+  public DevicesConfig getDevicesConfig() {
+    return deviceApiService.getDevicesConfig();
+  }
+
+  /**
+   * @param deviceId the device id
+   * @param type     the device type
+   * @return the config of a device
+   */
+  @GetMapping(path = "/config/{deviceId}/{type}", produces = APPLICATION_JSON_VALUE)
+  public DeviceConfig getDeviceConfig(@PathVariable String deviceId,
+                                      @PathVariable String type
+  ) {
+    return deviceApiService.getDeviceConfig(new DeviceId(deviceId, type)).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+  }
+
+  /**
+   * Updates the display name and the custom identifiers of a device
+   *
+   * @param deviceId     the device id
+   * @param type         the device type
+   * @param deviceConfig the device config
+   */
+  @PutMapping(path = "/config/{deviceId}/{type}")
+  public void setDevicesConfig(@PathVariable String deviceId,
+                               @PathVariable String type,
+                               @RequestBody DeviceConfig deviceConfig
+  ) {
+    assert deviceConfig.type().equalsIgnoreCase(type);
+    assert deviceConfig.id().equalsIgnoreCase(deviceId);
+    deviceApiService.updateDevice(deviceConfig);
+  }
+
+  /**
+   * Adds a new device.
+   *
+   * @param deviceConfig the config of the new device
+   */
+  @PostMapping(path = "/config")
+  public void addDevicesConfig(@RequestBody DeviceConfig deviceConfig) {
+    deviceApiService.addDevice(deviceConfig);
+  }
 
 }

@@ -20,12 +20,14 @@ import io.github.davemeier82.homeautomation.core.device.Device;
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import io.github.davemeier82.homeautomation.spring.core.DeviceRegistry;
+import io.github.davemeier82.homeautomation.spring.core.config.device.*;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Comparator.comparing;
@@ -41,14 +43,23 @@ public class DeviceApiService {
   private final DeviceRegistry deviceRegistry;
   private final DeviceToDtoMapper deviceToDtoMapper;
   private final Set<DevicePropertyUpdater> devicePropertyUpdaters;
+  private final DeviceConfigFactory deviceConfigFactory;
+  private final DeviceLoader deviceLoader;
+  private final DeviceConfigWriter deviceConfigWriter;
 
   public DeviceApiService(DeviceRegistry deviceRegistry,
                           DeviceToDtoMapper deviceToDtoMapper,
-                          Set<DevicePropertyUpdater> devicePropertyUpdaters
+                          Set<DevicePropertyUpdater> devicePropertyUpdaters,
+                          DeviceConfigFactory deviceConfigFactory,
+                          DeviceLoader deviceLoader,
+                          DeviceConfigWriter deviceConfigWriter
   ) {
     this.deviceRegistry = deviceRegistry;
     this.deviceToDtoMapper = deviceToDtoMapper;
     this.devicePropertyUpdaters = devicePropertyUpdaters;
+    this.deviceConfigFactory = deviceConfigFactory;
+    this.deviceLoader = deviceLoader;
+    this.deviceConfigWriter = deviceConfigWriter;
   }
 
   /**
@@ -77,4 +88,44 @@ public class DeviceApiService {
         .forEach(updater -> updater.update(deviceProperty, body));
   }
 
+  /**
+   * @return the config of all devices
+   */
+  public DevicesConfig getDevicesConfig() {
+    return deviceConfigFactory.createDevicesConfig();
+  }
+
+  /**
+   * @param deviceId the identifier of the device
+   * @return the config to the device
+   */
+  public Optional<DeviceConfig> getDeviceConfig(DeviceId deviceId) {
+    return deviceConfigFactory.createDeviceConfig(deviceId);
+  }
+
+  /**
+   * Adds a new device
+   *
+   * @param deviceConfig the config of the new device
+   */
+  public void addDevice(DeviceConfig deviceConfig) {
+    if (deviceRegistry.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).isEmpty()) {
+      deviceLoader.load(deviceConfig);
+      deviceConfigWriter.save();
+    } else {
+      throw new IllegalStateException("device with id " + deviceConfig.id() + " and type " + deviceConfig.type() + " already exists");
+    }
+  }
+
+  /**
+   * Updates the display name and the custom identifiers
+   *
+   * @param deviceConfig the device config
+   */
+  public void updateDevice(DeviceConfig deviceConfig) {
+    Device device = deviceRegistry.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).orElseThrow();
+    device.setCustomIdentifiers(deviceConfig.customIdentifiers());
+    device.setDisplayName(deviceConfig.displayName());
+    deviceConfigWriter.save();
+  }
 }

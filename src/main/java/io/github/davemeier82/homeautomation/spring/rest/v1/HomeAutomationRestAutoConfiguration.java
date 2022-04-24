@@ -18,6 +18,9 @@ package io.github.davemeier82.homeautomation.spring.rest.v1;
 
 import io.github.davemeier82.homeautomation.spring.core.DeviceRegistry;
 import io.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreAutoConfiguration;
+import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigFactory;
+import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigWriter;
+import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceLoader;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceApiService;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceController;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
@@ -54,8 +57,18 @@ public class HomeAutomationRestAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  DeviceApiService deviceApiService(DeviceRegistry deviceRegistry, DeviceToDtoMapper deviceToDtoMapper) {
-    return new DeviceApiService(deviceRegistry, deviceToDtoMapper, Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater()));
+  DeviceApiService deviceApiService(DeviceRegistry deviceRegistry,
+                                    DeviceToDtoMapper deviceToDtoMapper,
+                                    DeviceConfigFactory deviceConfigFactory,
+                                    DeviceLoader deviceLoader,
+                                    DeviceConfigWriter deviceConfigWriter
+  ) {
+    return new DeviceApiService(deviceRegistry,
+        deviceToDtoMapper,
+        Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater()),
+        deviceConfigFactory,
+        deviceLoader,
+        deviceConfigWriter);
   }
 
   @Bean
