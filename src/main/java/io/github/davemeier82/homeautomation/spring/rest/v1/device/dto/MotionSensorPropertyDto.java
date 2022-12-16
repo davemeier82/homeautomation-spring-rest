@@ -24,16 +24,22 @@ import java.time.ZonedDateTime;
  */
 public class MotionSensorPropertyDto extends DevicePropertyDto {
   private final Boolean motionDetected;
+  private final ZonedDateTime lastMotion;
   private final ZonedDateTime lastUpdated;
 
-  public MotionSensorPropertyDto(long id, Boolean motionDetected, ZonedDateTime lastUpdated) {
+  public MotionSensorPropertyDto(long id, Boolean motionDetected, ZonedDateTime lastMotion, ZonedDateTime lastUpdated) {
     super(id, "MotionSensor");
     this.motionDetected = motionDetected;
+    this.lastMotion = lastMotion;
     this.lastUpdated = lastUpdated;
   }
 
   public Boolean getMotionDetected() {
     return motionDetected;
+  }
+
+  public ZonedDateTime getLastMotion() {
+    return lastMotion;
   }
 
   public ZonedDateTime getLastUpdated() {

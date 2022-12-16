@@ -148,6 +148,7 @@ public class DeviceToDtoMapper {
   public MotionSensorPropertyDto map(MotionSensor sensor) {
     return new MotionSensorPropertyDto(sensor.getId(),
         getValueOrNull(sensor.getMotionDetected()),
+        sensor.getLastMotionDetected().orElse(null),
         getTimestampOrNull(sensor.getMotionDetected()));
   }
 
