@@ -65,6 +65,9 @@ public class EventToDtoMapper {
     } else if (event instanceof WindowStateChangedEvent windowStateChangedEvent) {
       DataWithTimestamp<Boolean> on = windowStateChangedEvent.isOpen();
       return toEvent(deviceProperty, device, windowStateChangedEvent.getPreviousValue(), on, "WindowStateChangedEvent");
+    } else if (event instanceof MotionDetectedEvent motionDetectedEvent) {
+      DataWithTimestamp<Boolean> motionDetected = motionDetectedEvent.motionDetected();
+      return toEvent(deviceProperty, device, motionDetectedEvent.getPreviousValue(), motionDetected, "MotionDetectedEvent");
     }
 
     return null;
