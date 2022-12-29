@@ -65,9 +65,42 @@ public class EventToDtoMapper {
     } else if (event instanceof WindowStateChangedEvent windowStateChangedEvent) {
       DataWithTimestamp<Boolean> on = windowStateChangedEvent.isOpen();
       return toEvent(deviceProperty, device, windowStateChangedEvent.getPreviousValue(), on, "WindowStateChangedEvent");
-    } else if (event instanceof MotionDetectedEvent motionDetectedEvent) {
-      DataWithTimestamp<Boolean> motionDetected = motionDetectedEvent.motionDetected();
-      return toEvent(deviceProperty, device, motionDetectedEvent.getPreviousValue(), motionDetected, "MotionDetectedEvent");
+    } else if (event instanceof MotionChangedEvent motionChangedEvent) {
+      DataWithTimestamp<Boolean> motionDetected = motionChangedEvent.motionDetected();
+      return toEvent(deviceProperty, device, motionChangedEvent.getPreviousValue(), motionDetected, "MotionChangedEvent");
+    } else if (event instanceof RelayStateUpdatedEvent relayEvent) {
+      DataWithTimestamp<Boolean> on = relayEvent.isOn();
+      return toEvent(deviceProperty, device, relayEvent.getPreviousValue(), on, "RelayStateUpdatedEvent");
+    } else if (event instanceof TemperatureUpdatedEvent temperatureUpdatedEvent) {
+      DataWithTimestamp<Float> on = temperatureUpdatedEvent.getTemperatureInDegree();
+      return toEvent(deviceProperty, device, temperatureUpdatedEvent.getPreviousValue(), on, "TemperatureUpdatedEvent");
+    } else if (event instanceof HumidityUpdatedEvent humidityUpdatedEvent) {
+      DataWithTimestamp<Float> on = humidityUpdatedEvent.getRelativeHumidityInPercent();
+      return toEvent(deviceProperty, device, humidityUpdatedEvent.getPreviousValue(), on, "HumidityUpdatedEvent");
+    } else if (event instanceof DimmingLevelUpdatedEvent dimmingLevelUpdatedEvent) {
+      DataWithTimestamp<Integer> on = dimmingLevelUpdatedEvent.getDimmingLevelInPercent();
+      return toEvent(deviceProperty, device, dimmingLevelUpdatedEvent.getPreviousValue(), on, "DimmingLevelUpdatedEvent");
+    } else if (event instanceof IlluminanceUpdatedEvent illuminanceUpdatedEvent) {
+      DataWithTimestamp<Integer> on = illuminanceUpdatedEvent.getLux();
+      return toEvent(deviceProperty, device, illuminanceUpdatedEvent.getPreviousValue(), on, "IlluminanceUpdatedEvent");
+    } else if (event instanceof RollerStateUpdatedEvent rollerStateUpdatedEvent) {
+      DataWithTimestamp<RollerState> on = rollerStateUpdatedEvent.getState();
+      return toEvent(deviceProperty, device, rollerStateUpdatedEvent.getPreviousValue(), on, "RollerStateUpdatedEvent");
+    } else if (event instanceof RollerPositionUpdatedEvent rollerPositionUpdatedEvent) {
+      DataWithTimestamp<Integer> on = rollerPositionUpdatedEvent.getPositionInPercent();
+      return toEvent(deviceProperty, device, rollerPositionUpdatedEvent.getPreviousValue(), on, "RollerPositionUpdatedEvent");
+    } else if (event instanceof BatteryLevelUpdatedEvent batteryLevelUpdatedEvent) {
+      DataWithTimestamp<Integer> on = batteryLevelUpdatedEvent.getBatteryLevelInPercent();
+      return toEvent(deviceProperty, device, batteryLevelUpdatedEvent.getPreviousValue(), on, "BatteryLevelUpdatedEvent");
+    } else if (event instanceof PowerUpdatedEvent powerUpdatedEvent) {
+      DataWithTimestamp<Double> on = powerUpdatedEvent.getWatt();
+      return toEvent(deviceProperty, device, powerUpdatedEvent.getPreviousValue(), on, "PowerUpdatedEvent");
+    } else if (event instanceof WindowStateUpdatedEvent windowStateUpdatedEvent) {
+      DataWithTimestamp<Boolean> on = windowStateUpdatedEvent.isOpen();
+      return toEvent(deviceProperty, device, windowStateUpdatedEvent.getPreviousValue(), on, "WindowStateUpdatedEvent");
+    } else if (event instanceof MotionUpdatedEvent motionUpdatedEvent) {
+      DataWithTimestamp<Boolean> motionDetected = motionUpdatedEvent.motionDetected();
+      return toEvent(deviceProperty, device, motionUpdatedEvent.getPreviousValue(), motionDetected, "MotionUpdatedEvent");
     }
 
     return null;
