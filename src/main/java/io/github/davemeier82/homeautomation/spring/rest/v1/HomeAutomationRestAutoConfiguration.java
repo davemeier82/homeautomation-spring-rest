@@ -30,10 +30,10 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.Roller
 import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventApiService;
 import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventController;
 import io.github.davemeier82.homeautomation.spring.rest.v1.event.mapper.EventToDtoMapper;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
@@ -43,7 +43,7 @@ import java.util.Set;
  * @author David Meier
  * @since 0.1.0
  */
-@Configuration
+@AutoConfiguration
 @AutoConfigureAfter(HomeAutomationCoreAutoConfiguration.class)
 public class HomeAutomationRestAutoConfiguration {
 
