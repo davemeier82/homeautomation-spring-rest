@@ -16,8 +16,10 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1.event;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,8 +33,10 @@ import static io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomation
  * @author David Meier
  * @since 0.1.0
  */
+@Controller
 @ResponseBody
 @RequestMapping(API_PATH + "events")
+@ConditionalOnMissingBean
 public class EventController {
 
   private final EventApiService eventApiService;

@@ -21,6 +21,7 @@ import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConf
 import io.github.davemeier82.homeautomation.spring.core.config.device.DevicesConfig;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +38,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * @author David Meier
  * @since 0.1.0
  */
+@Controller
 @ResponseBody
 @ConditionalOnMissingBean
 @RequestMapping(API_PATH + "devices")
