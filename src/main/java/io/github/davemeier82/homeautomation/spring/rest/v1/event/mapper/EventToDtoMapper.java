@@ -17,6 +17,7 @@
 package io.github.davemeier82.homeautomation.spring.rest.v1.event.mapper;
 
 import io.github.davemeier82.homeautomation.core.device.Device;
+import io.github.davemeier82.homeautomation.core.device.property.AlarmState;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import io.github.davemeier82.homeautomation.core.device.property.RollerState;
 import io.github.davemeier82.homeautomation.core.event.*;
@@ -101,6 +102,15 @@ public class EventToDtoMapper {
     } else if (event instanceof MotionUpdatedEvent motionUpdatedEvent) {
       DataWithTimestamp<Boolean> motionDetected = motionUpdatedEvent.motionDetected();
       return toEvent(deviceProperty, device, motionUpdatedEvent.getPreviousValue(), motionDetected, "MotionUpdatedEvent");
+    } else if (event instanceof SmokeStateUpdatedEvent smokeStateUpdatedEvent) {
+      DataWithTimestamp<Boolean> smokeDetected = smokeStateUpdatedEvent.isActive();
+      return toEvent(deviceProperty, device, smokeStateUpdatedEvent.getPreviousValue(), smokeDetected, "SmokeStateUpdatedEvent");
+    } else if (event instanceof Co2LevelUpdatedEvent co2LevelUpdatedEvent) {
+      DataWithTimestamp<Integer> ppm = co2LevelUpdatedEvent.getPpm();
+      return toEvent(deviceProperty, device, co2LevelUpdatedEvent.getPreviousValue(), ppm, "Co2LevelUpdatedEvent");
+    } else if (event instanceof AlarmStateUpdatedEvent alarmStateUpdatedEvent) {
+      DataWithTimestamp<AlarmState> state = alarmStateUpdatedEvent.getState();
+      return toEvent(deviceProperty, device, alarmStateUpdatedEvent.getPreviousValue(), state, "AlarmStateUpdatedEvent");
     }
 
     return null;
