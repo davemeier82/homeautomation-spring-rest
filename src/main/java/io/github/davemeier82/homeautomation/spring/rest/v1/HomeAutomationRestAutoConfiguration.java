@@ -24,6 +24,7 @@ import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceLoad
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceApiService;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceController;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.AlarmUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DimmerUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
@@ -65,7 +66,7 @@ public class HomeAutomationRestAutoConfiguration {
   ) {
     return new DeviceApiService(deviceRegistry,
         deviceToDtoMapper,
-        Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater()),
+        Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater(), new AlarmUpdater()),
         deviceConfigFactory,
         deviceLoader,
         deviceConfigWriter);

@@ -60,6 +60,12 @@ public class DeviceToDtoMapper {
         propertyDto = map(sensor);
       } else if (property instanceof IlluminanceSensor sensor) {
         propertyDto = map(sensor);
+      } else if (property instanceof SmokeSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof Co2Sensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof Alarm alarm) {
+        propertyDto = map(alarm);
       }
       if (propertyDto != null) {
         properties.add(propertyDto);
@@ -150,6 +156,30 @@ public class DeviceToDtoMapper {
         getValueOrNull(sensor.getMotionDetected()),
         sensor.getLastMotionDetected().orElse(null),
         getTimestampOrNull(sensor.getMotionDetected()));
+  }
+
+  public Co2SensorPropertyDto map(Co2Sensor sensor) {
+    return new Co2SensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getPpm()),
+        getTimestampOrNull(sensor.getPpm())
+    );
+  }
+
+  public SmokeSensorPropertyDto map(SmokeSensor sensor) {
+    return new SmokeSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.isSmokeDetected()),
+        getTimestampOrNull(sensor.isSmokeDetected())
+    );
+  }
+
+  public AlarmPropertyDto map(Alarm alarm) {
+    return new AlarmPropertyDto(
+        alarm.getId(),
+        getValueOrNull(alarm.getState()),
+        getTimestampOrNull(alarm.getState())
+    );
   }
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

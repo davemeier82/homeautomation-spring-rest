@@ -15,16 +15,17 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.github.davemeier82.homeautomation</groupId>
         <artifactId>homeautomation-parent</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1</version>
     </parent>
 
     <artifactId>homeautomation-spring-rest</artifactId>
-    <version>0.2.3-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>HomeAutomation Spring REST endpoints</description>
@@ -48,14 +49,13 @@
         <developerConnection>scm:git:ssh://git@github.com/davemeier82/homeautomation-spring-rest.git
         </developerConnection>
         <url>https://github.com/davemeier82/homeautomation-spring-rest</url>
-        <tag>homeautomation-spring-rest-0.1.4</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/davemeier82/homeautomation-spring-rest/issues</url>
     </issueManagement>
     <properties>
-        <homeautomation-spring-core.version>0.2.1</homeautomation-spring-core.version>
+        <homeautomation-spring-core.version>0.2.2</homeautomation-spring-core.version>
     </properties>
 
     <dependencies>
