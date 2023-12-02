@@ -38,6 +38,7 @@ public class DeviceToDtoMapper {
     List<DevicePropertyDto> properties = new ArrayList<>();
     DeviceDto deviceDto = new DeviceDto(device.getType(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers());
 
+    // TODO change to switch statement
     for (DeviceProperty property : device.getDeviceProperties()) {
       DevicePropertyDto propertyDto = null;
       if (property instanceof Dimmer dimmer) {
@@ -66,6 +67,16 @@ public class DeviceToDtoMapper {
         propertyDto = map(sensor);
       } else if (property instanceof Alarm alarm) {
         propertyDto = map(alarm);
+      } else if (property instanceof PressureSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof CloudBaseSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof UvSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof RainSensor sensor) {
+        propertyDto = map(sensor);
+      } else if (property instanceof WindSensor sensor) {
+        propertyDto = map(sensor);
       }
       if (propertyDto != null) {
         properties.add(propertyDto);
@@ -181,6 +192,57 @@ public class DeviceToDtoMapper {
         getTimestampOrNull(alarm.getState())
     );
   }
+
+  public CloudBaseSensorPropertyDto map(CloudBaseSensor sensor) {
+    return new CloudBaseSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getMeter()),
+        getTimestampOrNull(sensor.getMeter())
+    );
+  }
+
+  public PressureSensorPropertyDto map(PressureSensor sensor) {
+    return new PressureSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getMillibar()),
+        getTimestampOrNull(sensor.getMillibar())
+    );
+  }
+
+  public UvSensorPropertyDto map(UvSensor sensor) {
+    return new UvSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getIndex()),
+        getTimestampOrNull(sensor.getIndex())
+    );
+  }
+
+  public WindSensorPropertyDto map(WindSensor sensor) {
+    return new WindSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getSpeedInKmh()),
+        getValueOrNull(sensor.getGustSpeedInKmh()),
+        getValueOrNull(sensor.getDirectionInDegree()),
+        getValueOrNull(sensor.getGustDirectionInDegree()),
+        getValueOrNull(sensor.getIntervalRunInKm()),
+        getTimestampOrNull(sensor.getSpeedInKmh()),
+        getTimestampOrNull(sensor.getGustSpeedInKmh()),
+        getTimestampOrNull(sensor.getDirectionInDegree()),
+        getTimestampOrNull(sensor.getGustDirectionInDegree()),
+        getTimestampOrNull(sensor.getIntervalRunInKm()));
+  }
+
+  public RainSensorPropertyDto map(RainSensor sensor) {
+    return new RainSensorPropertyDto(
+        sensor.getId(),
+        getValueOrNull(sensor.getRateInMmph()),
+        getValueOrNull(sensor.getIntervalMm()),
+        getValueOrNull(sensor.getTodayInMm()),
+        getTimestampOrNull(sensor.getRateInMmph()),
+        getTimestampOrNull(sensor.getIntervalMm()),
+        getTimestampOrNull(sensor.getTodayInMm()));
+  }
+
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   private <T> T getValueOrNull(Optional<DataWithTimestamp<T>> dataWithTimestamp) {
