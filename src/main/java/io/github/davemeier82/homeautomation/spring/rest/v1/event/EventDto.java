@@ -29,6 +29,8 @@ public class EventDto<T> {
   private final String type;
   private final String id;
   private final String propertyType;
+
+  private final String label;
   private final long propertyId;
   private final T oldValue;
   private final T newValue;
@@ -38,7 +40,7 @@ public class EventDto<T> {
   public EventDto(String type,
                   String id,
                   String propertyType,
-                  long propertyId,
+                  String label, long propertyId,
                   T newValue,
                   T oldValue,
                   ZonedDateTime eventTime,
@@ -47,6 +49,7 @@ public class EventDto<T> {
     this.type = type;
     this.id = id;
     this.propertyType = propertyType;
+    this.label = label;
     this.propertyId = propertyId;
     this.oldValue = oldValue;
     this.newValue = newValue;
@@ -60,6 +63,10 @@ public class EventDto<T> {
 
   public String getId() {
     return id;
+  }
+
+  public String getLabel() {
+    return label;
   }
 
   public String getPropertyType() {

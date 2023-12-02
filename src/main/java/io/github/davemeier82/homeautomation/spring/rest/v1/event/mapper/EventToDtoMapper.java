@@ -17,9 +17,7 @@
 package io.github.davemeier82.homeautomation.spring.rest.v1.event.mapper;
 
 import io.github.davemeier82.homeautomation.core.device.Device;
-import io.github.davemeier82.homeautomation.core.device.property.AlarmState;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
-import io.github.davemeier82.homeautomation.core.device.property.RollerState;
 import io.github.davemeier82.homeautomation.core.event.*;
 import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventDto;
 
@@ -36,81 +34,107 @@ public class EventToDtoMapper {
   public EventDto<?> map(DevicePropertyEvent event) {
     DeviceProperty deviceProperty = event.getDeviceProperty();
     Device device = deviceProperty.getDevice();
-    if (event instanceof RelayStateChangedEvent relayEvent) {
-      DataWithTimestamp<Boolean> on = relayEvent.isOn();
-      return toEvent(deviceProperty, device, relayEvent.getPreviousValue(), on, "RelayStateChangedEvent");
-    } else if (event instanceof TemperatureChangedEvent temperatureChangedEvent) {
-      DataWithTimestamp<Float> on = temperatureChangedEvent.getTemperatureInDegree();
-      return toEvent(deviceProperty, device, temperatureChangedEvent.getPreviousValue(), on, "TemperatureChangedEvent");
-    } else if (event instanceof HumidityChangedEvent humidityChangedEvent) {
-      DataWithTimestamp<Float> on = humidityChangedEvent.getRelativeHumidityInPercent();
-      return toEvent(deviceProperty, device, humidityChangedEvent.getPreviousValue(), on, "HumidityChangedEvent");
-    } else if (event instanceof DimmingLevelChangedEvent dimmingLevelChangedEvent) {
-      DataWithTimestamp<Integer> on = dimmingLevelChangedEvent.getDimmingLevelInPercent();
-      return toEvent(deviceProperty, device, dimmingLevelChangedEvent.getPreviousValue(), on, "DimmingLevelChangedEvent");
-    } else if (event instanceof IlluminanceChangedEvent humidityChangedEvent) {
-      DataWithTimestamp<Integer> on = humidityChangedEvent.getLux();
-      return toEvent(deviceProperty, device, humidityChangedEvent.getPreviousValue(), on, "IlluminanceChangedEvent");
-    } else if (event instanceof RollerStateChangedEvent rollerStateChangedEvent) {
-      DataWithTimestamp<RollerState> on = rollerStateChangedEvent.getState();
-      return toEvent(deviceProperty, device, rollerStateChangedEvent.getPreviousValue(), on, "RollerStateChangedEvent");
-    } else if (event instanceof RollerPositionChangedEvent rollerPositionChangedEvent) {
-      DataWithTimestamp<Integer> on = rollerPositionChangedEvent.getPositionInPercent();
-      return toEvent(deviceProperty, device, rollerPositionChangedEvent.getPreviousValue(), on, "RollerPositionChangedEvent");
-    } else if (event instanceof BatteryLevelChangedEvent batteryLevelChangedEvent) {
-      DataWithTimestamp<Integer> on = batteryLevelChangedEvent.getBatteryLevelInPercent();
-      return toEvent(deviceProperty, device, batteryLevelChangedEvent.getPreviousValue(), on, "BatteryLevelChangedEvent");
-    } else if (event instanceof PowerChangedEvent powerChangedEvent) {
-      DataWithTimestamp<Double> on = powerChangedEvent.getWatt();
-      return toEvent(deviceProperty, device, powerChangedEvent.getPreviousValue(), on, "PowerChangedEvent");
-    } else if (event instanceof WindowStateChangedEvent windowStateChangedEvent) {
-      DataWithTimestamp<Boolean> on = windowStateChangedEvent.isOpen();
-      return toEvent(deviceProperty, device, windowStateChangedEvent.getPreviousValue(), on, "WindowStateChangedEvent");
-    } else if (event instanceof MotionChangedEvent motionChangedEvent) {
-      DataWithTimestamp<Boolean> motionDetected = motionChangedEvent.motionDetected();
-      return toEvent(deviceProperty, device, motionChangedEvent.getPreviousValue(), motionDetected, "MotionChangedEvent");
-    } else if (event instanceof RelayStateUpdatedEvent relayEvent) {
-      DataWithTimestamp<Boolean> on = relayEvent.isOn();
-      return toEvent(deviceProperty, device, relayEvent.getPreviousValue(), on, "RelayStateUpdatedEvent");
-    } else if (event instanceof TemperatureUpdatedEvent temperatureUpdatedEvent) {
-      DataWithTimestamp<Float> on = temperatureUpdatedEvent.getTemperatureInDegree();
-      return toEvent(deviceProperty, device, temperatureUpdatedEvent.getPreviousValue(), on, "TemperatureUpdatedEvent");
-    } else if (event instanceof HumidityUpdatedEvent humidityUpdatedEvent) {
-      DataWithTimestamp<Float> on = humidityUpdatedEvent.getRelativeHumidityInPercent();
-      return toEvent(deviceProperty, device, humidityUpdatedEvent.getPreviousValue(), on, "HumidityUpdatedEvent");
-    } else if (event instanceof DimmingLevelUpdatedEvent dimmingLevelUpdatedEvent) {
-      DataWithTimestamp<Integer> on = dimmingLevelUpdatedEvent.getDimmingLevelInPercent();
-      return toEvent(deviceProperty, device, dimmingLevelUpdatedEvent.getPreviousValue(), on, "DimmingLevelUpdatedEvent");
-    } else if (event instanceof IlluminanceUpdatedEvent illuminanceUpdatedEvent) {
-      DataWithTimestamp<Integer> on = illuminanceUpdatedEvent.getLux();
-      return toEvent(deviceProperty, device, illuminanceUpdatedEvent.getPreviousValue(), on, "IlluminanceUpdatedEvent");
-    } else if (event instanceof RollerStateUpdatedEvent rollerStateUpdatedEvent) {
-      DataWithTimestamp<RollerState> on = rollerStateUpdatedEvent.getState();
-      return toEvent(deviceProperty, device, rollerStateUpdatedEvent.getPreviousValue(), on, "RollerStateUpdatedEvent");
-    } else if (event instanceof RollerPositionUpdatedEvent rollerPositionUpdatedEvent) {
-      DataWithTimestamp<Integer> on = rollerPositionUpdatedEvent.getPositionInPercent();
-      return toEvent(deviceProperty, device, rollerPositionUpdatedEvent.getPreviousValue(), on, "RollerPositionUpdatedEvent");
-    } else if (event instanceof BatteryLevelUpdatedEvent batteryLevelUpdatedEvent) {
-      DataWithTimestamp<Integer> on = batteryLevelUpdatedEvent.getBatteryLevelInPercent();
-      return toEvent(deviceProperty, device, batteryLevelUpdatedEvent.getPreviousValue(), on, "BatteryLevelUpdatedEvent");
-    } else if (event instanceof PowerUpdatedEvent powerUpdatedEvent) {
-      DataWithTimestamp<Double> on = powerUpdatedEvent.getWatt();
-      return toEvent(deviceProperty, device, powerUpdatedEvent.getPreviousValue(), on, "PowerUpdatedEvent");
-    } else if (event instanceof WindowStateUpdatedEvent windowStateUpdatedEvent) {
-      DataWithTimestamp<Boolean> on = windowStateUpdatedEvent.isOpen();
-      return toEvent(deviceProperty, device, windowStateUpdatedEvent.getPreviousValue(), on, "WindowStateUpdatedEvent");
-    } else if (event instanceof MotionUpdatedEvent motionUpdatedEvent) {
-      DataWithTimestamp<Boolean> motionDetected = motionUpdatedEvent.motionDetected();
-      return toEvent(deviceProperty, device, motionUpdatedEvent.getPreviousValue(), motionDetected, "MotionUpdatedEvent");
-    } else if (event instanceof SmokeStateUpdatedEvent smokeStateUpdatedEvent) {
-      DataWithTimestamp<Boolean> smokeDetected = smokeStateUpdatedEvent.isActive();
-      return toEvent(deviceProperty, device, smokeStateUpdatedEvent.getPreviousValue(), smokeDetected, "SmokeStateUpdatedEvent");
-    } else if (event instanceof Co2LevelUpdatedEvent co2LevelUpdatedEvent) {
-      DataWithTimestamp<Integer> ppm = co2LevelUpdatedEvent.getPpm();
-      return toEvent(deviceProperty, device, co2LevelUpdatedEvent.getPreviousValue(), ppm, "Co2LevelUpdatedEvent");
-    } else if (event instanceof AlarmStateUpdatedEvent alarmStateUpdatedEvent) {
-      DataWithTimestamp<AlarmState> state = alarmStateUpdatedEvent.getState();
-      return toEvent(deviceProperty, device, alarmStateUpdatedEvent.getPreviousValue(), state, "AlarmStateUpdatedEvent");
+    // TODO change to switch statement
+    if (event instanceof RelayStateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isOn(), e.getClass().getSimpleName());
+    } else if (event instanceof TemperatureChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getTemperatureInDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof HumidityChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getRelativeHumidityInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof DimmingLevelChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDimmingLevelInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof IlluminanceChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getLux(), e.getClass().getSimpleName());
+    } else if (event instanceof RollerStateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getState(), e.getClass().getSimpleName());
+    } else if (event instanceof RollerPositionChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPositionInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof BatteryLevelChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getBatteryLevelInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof PowerChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getWatt(), e.getClass().getSimpleName());
+    } else if (event instanceof WindowStateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isOpen(), e.getClass().getSimpleName());
+    } else if (event instanceof MotionChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.motionDetected(), e.getClass().getSimpleName());
+    } else if (event instanceof SmokeStateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isSmokeDetected(), e.getClass().getSimpleName());
+    } else if (event instanceof Co2LevelChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPpm(), e.getClass().getSimpleName());
+    } else if (event instanceof AlarmStateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getState(), e.getClass().getSimpleName());
+    } else if (event instanceof PressureChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPressureInMbar(), e.getClass().getSimpleName());
+    } else if (event instanceof UvIndexChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getUvIndex(), e.getClass().getSimpleName());
+    } else if (event instanceof CloudBaseChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getCloudBaseInMeter(), e.getClass().getSimpleName());
+    } else if (event instanceof WindSpeedChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometerPerHour(), e.getClass().getSimpleName());
+    } else if (event instanceof WindGustSpeedChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometerPerHour(), e.getClass().getSimpleName());
+    } else if (event instanceof WindDirectionChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof WindGustDirectionChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof WindRunChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometer(), e.getClass().getSimpleName());
+    } else if (event instanceof RainIntervalAmountChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeter(), e.getClass().getSimpleName());
+    } else if (event instanceof RainTodayAmountChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeter(), e.getClass().getSimpleName());
+    } else if (event instanceof RainRateChangedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeterPerHour(), e.getClass().getSimpleName());
+    } else if (event instanceof RelayStateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isOn(), e.getClass().getSimpleName());
+    } else if (event instanceof TemperatureUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getTemperatureInDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof HumidityUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getRelativeHumidityInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof DimmingLevelUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDimmingLevelInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof IlluminanceUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getLux(), e.getClass().getSimpleName());
+    } else if (event instanceof RollerStateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getState(), e.getClass().getSimpleName());
+    } else if (event instanceof RollerPositionUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPositionInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof BatteryLevelUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getBatteryLevelInPercent(), e.getClass().getSimpleName());
+    } else if (event instanceof PowerUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getWatt(), e.getClass().getSimpleName());
+    } else if (event instanceof WindowStateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isOpen(), e.getClass().getSimpleName());
+    } else if (event instanceof MotionUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.motionDetected(), e.getClass().getSimpleName());
+    } else if (event instanceof SmokeStateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.isActive(), e.getClass().getSimpleName());
+    } else if (event instanceof Co2LevelUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPpm(), e.getClass().getSimpleName());
+    } else if (event instanceof AlarmStateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getState(), e.getClass().getSimpleName());
+    } else if (event instanceof PressureUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getPressureInMbar(), e.getClass().getSimpleName());
+    } else if (event instanceof UvIndexUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getUvIndex(), e.getClass().getSimpleName());
+    } else if (event instanceof CloudBaseUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getCloudBaseInMeter(), e.getClass().getSimpleName());
+    } else if (event instanceof WindSpeedUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometerPerHour(), e.getClass().getSimpleName());
+    } else if (event instanceof WindGustSpeedUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometerPerHour(), e.getClass().getSimpleName());
+    } else if (event instanceof WindDirectionUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof WindGustDirectionUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getDegree(), e.getClass().getSimpleName());
+    } else if (event instanceof WindRunUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getKilometer(), e.getClass().getSimpleName());
+    } else if (event instanceof RainIntervalAmountUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeter(), e.getClass().getSimpleName());
+    } else if (event instanceof RainTodayAmountUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeter(), e.getClass().getSimpleName());
+    } else if (event instanceof RainRateUpdatedEvent e) {
+      return toEvent(deviceProperty, device, e.getPreviousValue(), e.getMillimeterPerHour(), e.getClass().getSimpleName());
     }
 
     return null;
@@ -126,6 +150,7 @@ public class EventToDtoMapper {
     return new EventDto<>(device.getType(),
         device.getId(),
         propertyType,
+        deviceProperty.getLabel(),
         deviceProperty.getId(),
         value == null ? null : value.getValue(),
         (T) previousValue.map(DataWithTimestamp::getValue).orElse(null),
