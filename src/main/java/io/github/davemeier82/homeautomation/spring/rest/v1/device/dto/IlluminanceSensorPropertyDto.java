@@ -26,8 +26,12 @@ public class IlluminanceSensorPropertyDto extends DevicePropertyDto {
   private final Integer lux;
   private final ZonedDateTime lastUpdated;
 
-  public IlluminanceSensorPropertyDto(long id, Integer lux, ZonedDateTime lastUpdated) {
-    super(id, "IlluminanceSensor");
+  public IlluminanceSensorPropertyDto(long id,
+                                      String label,
+                                      Integer lux,
+                                      ZonedDateTime lastUpdated
+  ) {
+    super(id, "IlluminanceSensor", label);
     this.lux = lux;
     this.lastUpdated = lastUpdated;
   }

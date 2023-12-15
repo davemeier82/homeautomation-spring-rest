@@ -26,8 +26,8 @@ public class PowerSensorPropertyDto extends DevicePropertyDto {
   private final Double watt;
   private final ZonedDateTime lastUpdated;
 
-  public PowerSensorPropertyDto(long id, Double watt, ZonedDateTime lastUpdated) {
-    super(id, "PowerSensor");
+  public PowerSensorPropertyDto(long id, String label, Double watt, ZonedDateTime lastUpdated) {
+    super(id, "PowerSensor", label);
     this.watt = watt;
     this.lastUpdated = lastUpdated;
   }

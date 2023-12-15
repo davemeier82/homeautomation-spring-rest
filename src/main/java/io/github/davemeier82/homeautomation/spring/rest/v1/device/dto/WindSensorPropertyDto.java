@@ -35,6 +35,7 @@ public class WindSensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime intervalRunLastUpdated;
 
   public WindSensorPropertyDto(long id,
+                               String label,
                                Float speedInKmh,
                                Float gustSpeedInKmh,
                                Float directionInDegree,
@@ -46,7 +47,7 @@ public class WindSensorPropertyDto extends DevicePropertyDto {
                                ZonedDateTime gustDirectionLastUpdated,
                                ZonedDateTime intervalRunLastUpdated
   ) {
-    super(id, "WindSensor");
+    super(id, "WindSensor", label);
     this.speedInKmh = speedInKmh;
     this.gustSpeedInKmh = gustSpeedInKmh;
     this.directionInDegree = directionInDegree;

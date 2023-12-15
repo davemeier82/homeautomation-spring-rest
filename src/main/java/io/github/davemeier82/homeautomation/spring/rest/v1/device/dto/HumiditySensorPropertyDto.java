@@ -27,10 +27,11 @@ public class HumiditySensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime lastUpdated;
 
   public HumiditySensorPropertyDto(long id,
+                                   String label,
                                    Float relativeHumidityInPercent,
                                    ZonedDateTime lastUpdated
   ) {
-    super(id, "HumiditySensor");
+    super(id, "HumiditySensor", label);
     this.relativeHumidityInPercent = relativeHumidityInPercent;
     this.lastUpdated = lastUpdated;
   }

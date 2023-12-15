@@ -28,12 +28,13 @@ public class DimmerPropertyDto extends RelayPropertyDto {
 
 
   public DimmerPropertyDto(long id,
+                           String label,
                            Boolean isOn,
                            ZonedDateTime lastUpdated,
                            Integer dimmingLevelInPercent,
                            ZonedDateTime dimmingLevelLastUpdated
   ) {
-    super(id, "Dimmer", isOn, lastUpdated);
+    super(id, "Dimmer", label, isOn, lastUpdated);
     this.dimmingLevelInPercent = dimmingLevelInPercent;
     this.dimmingLevelLastUpdated = dimmingLevelLastUpdated;
   }

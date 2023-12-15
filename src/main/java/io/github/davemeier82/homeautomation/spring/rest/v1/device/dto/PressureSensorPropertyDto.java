@@ -26,8 +26,8 @@ public class PressureSensorPropertyDto extends DevicePropertyDto {
   private final Float pressureInMillibar;
   private final ZonedDateTime lastUpdated;
 
-  public PressureSensorPropertyDto(long id, Float pressureInMillibar, ZonedDateTime lastUpdated) {
-    super(id, "PressureSensor");
+  public PressureSensorPropertyDto(long id, String label, Float pressureInMillibar, ZonedDateTime lastUpdated) {
+    super(id, "PressureSensor", label);
     this.pressureInMillibar = pressureInMillibar;
     this.lastUpdated = lastUpdated;
   }

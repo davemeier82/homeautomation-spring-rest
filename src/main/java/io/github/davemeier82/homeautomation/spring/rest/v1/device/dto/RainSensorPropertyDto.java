@@ -31,6 +31,7 @@ public class RainSensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime todayInMmLastUpdated;
 
   public RainSensorPropertyDto(long id,
+                               String label,
                                Float rateInMmph,
                                Float gustSpeedInKmh,
                                Float todayInMm,
@@ -38,7 +39,7 @@ public class RainSensorPropertyDto extends DevicePropertyDto {
                                ZonedDateTime intervalMmLastUpdated,
                                ZonedDateTime todayInMmLastUpdated
   ) {
-    super(id, "RainSensor");
+    super(id, "RainSensor", label);
     this.rateInMmph = rateInMmph;
     this.intervalMm = gustSpeedInKmh;
     this.todayInMm = todayInMm;

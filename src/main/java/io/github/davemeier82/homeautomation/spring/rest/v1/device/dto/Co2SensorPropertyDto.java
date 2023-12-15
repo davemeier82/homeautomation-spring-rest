@@ -26,8 +26,8 @@ public class Co2SensorPropertyDto extends DevicePropertyDto {
   private final Integer ppm;
   private final ZonedDateTime lastUpdated;
 
-  public Co2SensorPropertyDto(long id, Integer ppm, ZonedDateTime lastUpdated) {
-    super(id, "Co2Sensor");
+  public Co2SensorPropertyDto(long id, String label, Integer ppm, ZonedDateTime lastUpdated) {
+    super(id, "Co2Sensor", label);
     this.ppm = ppm;
     this.lastUpdated = lastUpdated;
   }

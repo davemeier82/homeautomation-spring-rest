@@ -30,8 +30,14 @@ public class RollerPropertyDto extends DevicePropertyDto {
   private final Integer positionInPercent;
   private final ZonedDateTime positionLastUpdated;
 
-  public RollerPropertyDto(long id, RollerState state, ZonedDateTime stateLastUpdated, Integer positionInPercent, ZonedDateTime positionLastUpdated) {
-    super(id, "Roller");
+  public RollerPropertyDto(long id,
+                           String label,
+                           RollerState state,
+                           ZonedDateTime stateLastUpdated,
+                           Integer positionInPercent,
+                           ZonedDateTime positionLastUpdated
+  ) {
+    super(id, "Roller", label);
     this.state = state;
     this.stateLastUpdated = stateLastUpdated;
     this.positionInPercent = positionInPercent;

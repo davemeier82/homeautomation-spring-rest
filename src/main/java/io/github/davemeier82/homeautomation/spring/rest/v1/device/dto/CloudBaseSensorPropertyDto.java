@@ -26,8 +26,8 @@ public class CloudBaseSensorPropertyDto extends DevicePropertyDto {
   private final Float cloudBaseInMeter;
   private final ZonedDateTime lastUpdated;
 
-  public CloudBaseSensorPropertyDto(long id, Float cloudBaseInMeter, ZonedDateTime lastUpdated) {
-    super(id, "CloudBaseSensor");
+  public CloudBaseSensorPropertyDto(long id, String label, Float cloudBaseInMeter, ZonedDateTime lastUpdated) {
+    super(id, "CloudBaseSensor", label);
     this.cloudBaseInMeter = cloudBaseInMeter;
     this.lastUpdated = lastUpdated;
   }

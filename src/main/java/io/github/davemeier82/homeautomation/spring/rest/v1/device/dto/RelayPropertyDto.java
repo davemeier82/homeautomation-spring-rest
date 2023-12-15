@@ -26,12 +26,12 @@ public class RelayPropertyDto extends DevicePropertyDto {
   private final Boolean isOn;
   private final ZonedDateTime lastUpdated;
 
-  public RelayPropertyDto(long id, Boolean isOn, ZonedDateTime lastUpdated) {
-    this(id, "Relay", isOn, lastUpdated);
+  public RelayPropertyDto(long id, String label, Boolean isOn, ZonedDateTime lastUpdated) {
+    this(id, "Relay", label, isOn, lastUpdated);
   }
 
-  protected RelayPropertyDto(long id, String type, Boolean isOn, ZonedDateTime lastUpdated) {
-    super(id, type);
+  protected RelayPropertyDto(long id, String type, String label, Boolean isOn, ZonedDateTime lastUpdated) {
+    super(id, type, label);
     this.isOn = isOn;
     this.lastUpdated = lastUpdated;
   }

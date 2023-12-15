@@ -26,8 +26,8 @@ public class UvSensorPropertyDto extends DevicePropertyDto {
   private final Float uvIndex;
   private final ZonedDateTime lastUpdated;
 
-  public UvSensorPropertyDto(long id, Float uvIndex, ZonedDateTime lastUpdated) {
-    super(id, "UvSensor");
+  public UvSensorPropertyDto(long id, String label, Float uvIndex, ZonedDateTime lastUpdated) {
+    super(id, "UvSensor", label);
     this.uvIndex = uvIndex;
     this.lastUpdated = lastUpdated;
   }

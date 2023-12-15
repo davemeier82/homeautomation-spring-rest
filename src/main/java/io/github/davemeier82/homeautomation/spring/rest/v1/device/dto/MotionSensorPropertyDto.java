@@ -27,8 +27,8 @@ public class MotionSensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime lastMotion;
   private final ZonedDateTime lastUpdated;
 
-  public MotionSensorPropertyDto(long id, Boolean motionDetected, ZonedDateTime lastMotion, ZonedDateTime lastUpdated) {
-    super(id, "MotionSensor");
+  public MotionSensorPropertyDto(long id, String label, Boolean motionDetected, ZonedDateTime lastMotion, ZonedDateTime lastUpdated) {
+    super(id, "MotionSensor", label);
     this.motionDetected = motionDetected;
     this.lastMotion = lastMotion;
     this.lastUpdated = lastUpdated;

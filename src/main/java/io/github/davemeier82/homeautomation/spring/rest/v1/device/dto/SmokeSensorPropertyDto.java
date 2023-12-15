@@ -26,12 +26,12 @@ public class SmokeSensorPropertyDto extends DevicePropertyDto {
   private final Boolean isSmokeDetected;
   private final ZonedDateTime lastUpdated;
 
-  public SmokeSensorPropertyDto(long id, Boolean isSmokeDetected, ZonedDateTime lastUpdated) {
-    this(id, "SmokeSensor", isSmokeDetected, lastUpdated);
+  public SmokeSensorPropertyDto(long id, String label, Boolean isSmokeDetected, ZonedDateTime lastUpdated) {
+    this(id, "SmokeSensor", label, isSmokeDetected, lastUpdated);
   }
 
-  protected SmokeSensorPropertyDto(long id, String type, Boolean isSmokeDetected, ZonedDateTime lastUpdated) {
-    super(id, type);
+  protected SmokeSensorPropertyDto(long id, String label, String type, Boolean isSmokeDetected, ZonedDateTime lastUpdated) {
+    super(id, type, label);
     this.isSmokeDetected = isSmokeDetected;
     this.lastUpdated = lastUpdated;
   }

@@ -27,10 +27,11 @@ public class BatteryStateSensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime lastUpdated;
 
   public BatteryStateSensorPropertyDto(long id,
+                                       String label,
                                        Integer batteryLevelInPercent,
                                        ZonedDateTime lastUpdated
   ) {
-    super(id, "BatteryStateSensor");
+    super(id, "BatteryStateSensor", label);
     this.batteryLevelInPercent = batteryLevelInPercent;
     this.lastUpdated = lastUpdated;
   }

@@ -25,9 +25,12 @@ public class DevicePropertyDto {
   private final long id;
   private final String type;
 
-  public DevicePropertyDto(long id, String type) {
+  private final String label;
+
+  public DevicePropertyDto(long id, String type, String label) {
     this.id = id;
     this.type = type;
+    this.label = label;
   }
 
   public long getId() {
@@ -36,5 +39,9 @@ public class DevicePropertyDto {
 
   public String getType() {
     return type;
+  }
+
+  public String getLabel() {
+    return label;
   }
 }

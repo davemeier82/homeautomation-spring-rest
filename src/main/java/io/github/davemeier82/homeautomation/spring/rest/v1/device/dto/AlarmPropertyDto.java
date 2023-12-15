@@ -28,8 +28,8 @@ public class AlarmPropertyDto extends DevicePropertyDto {
   private final AlarmState state;
   private final ZonedDateTime lastUpdated;
 
-  public AlarmPropertyDto(long id, AlarmState state, ZonedDateTime lastUpdated) {
-    super(id, "Alarm");
+  public AlarmPropertyDto(long id, String label, AlarmState state, ZonedDateTime lastUpdated) {
+    super(id, "Alarm", label);
     this.state = state;
     this.lastUpdated = lastUpdated;
   }

@@ -30,13 +30,14 @@ public class WindowSensorPropertyDto extends DevicePropertyDto {
   private final ZonedDateTime tiltLastUpdated;
 
   public WindowSensorPropertyDto(long id,
+                                 String label,
                                  Boolean isOpen,
                                  ZonedDateTime isOpenLastUpdated,
                                  boolean isTiltingSupported,
                                  Integer tiltAngleInDegree,
                                  ZonedDateTime tiltLastUpdated
   ) {
-    super(id, "WindowSensor");
+    super(id, "WindowSensor", label);
     this.isOpen = isOpen;
     this.isOpenLastUpdated = isOpenLastUpdated;
     this.isTiltingSupported = isTiltingSupported;

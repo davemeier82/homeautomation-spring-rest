@@ -28,13 +28,10 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.AlarmU
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DimmerUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
-import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventApiService;
-import io.github.davemeier82.homeautomation.spring.rest.v1.event.EventController;
-import io.github.davemeier82.homeautomation.spring.rest.v1.event.mapper.EventToDtoMapper;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
@@ -44,7 +41,7 @@ import java.util.Set;
  * @author David Meier
  * @since 0.1.0
  */
-@AutoConfiguration
+@Configuration
 @AutoConfigureAfter(HomeAutomationCoreAutoConfiguration.class)
 public class HomeAutomationRestAutoConfiguration {
 
@@ -78,21 +75,4 @@ public class HomeAutomationRestAutoConfiguration {
     return new DeviceController(deviceApiService);
   }
 
-  @Bean
-  @ConditionalOnMissingBean
-  EventToDtoMapper eventToDtoMapper() {
-    return new EventToDtoMapper();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  EventApiService eventApiService(EventToDtoMapper eventToDtoMapper) {
-    return new EventApiService(eventToDtoMapper);
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  EventController eventController(EventApiService eventApiService) {
-    return new EventController(eventApiService);
-  }
 }

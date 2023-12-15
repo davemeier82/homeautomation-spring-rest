@@ -26,8 +26,8 @@ public class TemperatureSensorPropertyDto extends DevicePropertyDto {
   private final Float temperatureInDegree;
   private final ZonedDateTime lastUpdated;
 
-  public TemperatureSensorPropertyDto(long id, Float temperatureInDegree, ZonedDateTime lastUpdated) {
-    super(id, "TemperatureSensor");
+  public TemperatureSensorPropertyDto(long id, String label, Float temperatureInDegree, ZonedDateTime lastUpdated) {
+    super(id, "TemperatureSensor", label);
     this.temperatureInDegree = temperatureInDegree;
     this.lastUpdated = lastUpdated;
   }

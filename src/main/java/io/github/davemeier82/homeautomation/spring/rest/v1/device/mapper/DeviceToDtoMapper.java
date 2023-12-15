@@ -87,6 +87,7 @@ public class DeviceToDtoMapper {
 
   private RollerPropertyDto map(Roller roller) {
     return new RollerPropertyDto(roller.getId(),
+        roller.getLabel(),
         getValueOrNull(roller.getState()),
         getTimestampOrNull(roller.getState()),
         getValueOrNull(roller.getPositionInPercent()),
@@ -97,6 +98,7 @@ public class DeviceToDtoMapper {
   public RelayPropertyDto map(ReadOnlyRelay relay) {
     return new RelayPropertyDto(
         relay.getId(),
+        relay.getLabel(),
         getValueOrNull(relay.isOn()),
         getTimestampOrNull(relay.isOn())
     );
@@ -105,6 +107,7 @@ public class DeviceToDtoMapper {
   public DimmerPropertyDto map(Dimmer dimmer) {
     return new DimmerPropertyDto(
         dimmer.getId(),
+        dimmer.getLabel(),
         getValueOrNull(dimmer.isOn()),
         getTimestampOrNull(dimmer.isOn()),
         getValueOrNull(dimmer.getDimmingLevelInPercent()),
@@ -114,6 +117,7 @@ public class DeviceToDtoMapper {
   public WindowSensorPropertyDto map(WindowSensor sensor) {
     return new WindowSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.isOpen()),
         getTimestampOrNull(sensor.isOpen()),
         sensor.isTiltingSupported(),
@@ -125,6 +129,7 @@ public class DeviceToDtoMapper {
   public HumiditySensorPropertyDto map(HumiditySensor sensor) {
     return new HumiditySensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getRelativeHumidityInPercent()),
         getTimestampOrNull(sensor.getRelativeHumidityInPercent())
     );
@@ -133,6 +138,7 @@ public class DeviceToDtoMapper {
   public TemperatureSensorPropertyDto map(TemperatureSensor sensor) {
     return new TemperatureSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getTemperatureInDegree()),
         getTimestampOrNull(sensor.getTemperatureInDegree())
     );
@@ -141,6 +147,7 @@ public class DeviceToDtoMapper {
   public BatteryStateSensorPropertyDto map(BatteryStateSensor sensor) {
     return new BatteryStateSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.batteryLevelInPercent()),
         getTimestampOrNull(sensor.batteryLevelInPercent())
     );
@@ -149,6 +156,7 @@ public class DeviceToDtoMapper {
   public PowerSensorPropertyDto map(PowerSensor sensor) {
     return new PowerSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getWatt()),
         getTimestampOrNull(sensor.getWatt())
     );
@@ -157,6 +165,7 @@ public class DeviceToDtoMapper {
   public IlluminanceSensorPropertyDto map(IlluminanceSensor sensor) {
     return new IlluminanceSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getLux()),
         getTimestampOrNull(sensor.getLux())
     );
@@ -164,6 +173,7 @@ public class DeviceToDtoMapper {
 
   public MotionSensorPropertyDto map(MotionSensor sensor) {
     return new MotionSensorPropertyDto(sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getMotionDetected()),
         sensor.getLastMotionDetected().orElse(null),
         getTimestampOrNull(sensor.getMotionDetected()));
@@ -172,6 +182,7 @@ public class DeviceToDtoMapper {
   public Co2SensorPropertyDto map(Co2Sensor sensor) {
     return new Co2SensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getPpm()),
         getTimestampOrNull(sensor.getPpm())
     );
@@ -180,6 +191,7 @@ public class DeviceToDtoMapper {
   public SmokeSensorPropertyDto map(SmokeSensor sensor) {
     return new SmokeSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.isSmokeDetected()),
         getTimestampOrNull(sensor.isSmokeDetected())
     );
@@ -188,6 +200,7 @@ public class DeviceToDtoMapper {
   public AlarmPropertyDto map(Alarm alarm) {
     return new AlarmPropertyDto(
         alarm.getId(),
+        alarm.getLabel(),
         getValueOrNull(alarm.getState()),
         getTimestampOrNull(alarm.getState())
     );
@@ -196,6 +209,7 @@ public class DeviceToDtoMapper {
   public CloudBaseSensorPropertyDto map(CloudBaseSensor sensor) {
     return new CloudBaseSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getMeter()),
         getTimestampOrNull(sensor.getMeter())
     );
@@ -204,6 +218,7 @@ public class DeviceToDtoMapper {
   public PressureSensorPropertyDto map(PressureSensor sensor) {
     return new PressureSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getMillibar()),
         getTimestampOrNull(sensor.getMillibar())
     );
@@ -212,6 +227,7 @@ public class DeviceToDtoMapper {
   public UvSensorPropertyDto map(UvSensor sensor) {
     return new UvSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getIndex()),
         getTimestampOrNull(sensor.getIndex())
     );
@@ -220,6 +236,7 @@ public class DeviceToDtoMapper {
   public WindSensorPropertyDto map(WindSensor sensor) {
     return new WindSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getSpeedInKmh()),
         getValueOrNull(sensor.getGustSpeedInKmh()),
         getValueOrNull(sensor.getDirectionInDegree()),
@@ -235,6 +252,7 @@ public class DeviceToDtoMapper {
   public RainSensorPropertyDto map(RainSensor sensor) {
     return new RainSensorPropertyDto(
         sensor.getId(),
+        sensor.getLabel(),
         getValueOrNull(sensor.getRateInMmph()),
         getValueOrNull(sensor.getIntervalMm()),
         getValueOrNull(sensor.getTodayInMm()),
