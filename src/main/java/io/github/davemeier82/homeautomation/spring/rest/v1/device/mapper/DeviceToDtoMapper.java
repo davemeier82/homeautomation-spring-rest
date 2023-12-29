@@ -38,51 +38,37 @@ public class DeviceToDtoMapper {
     List<DevicePropertyDto> properties = new ArrayList<>();
     DeviceDto deviceDto = new DeviceDto(device.getType(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers());
 
-    // TODO change to switch statement
     for (DeviceProperty property : device.getDeviceProperties()) {
-      DevicePropertyDto propertyDto = null;
-      if (property instanceof Dimmer dimmer) {
-        propertyDto = map(dimmer);
-      } else if (property instanceof Relay relay) {
-        propertyDto = map(relay);
-      } else if (property instanceof WindowSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof TemperatureSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof HumiditySensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof MotionSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof BatteryStateSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof Roller roller) {
-        propertyDto = map(roller);
-      } else if (property instanceof PowerSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof IlluminanceSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof SmokeSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof Co2Sensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof Alarm alarm) {
-        propertyDto = map(alarm);
-      } else if (property instanceof PressureSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof CloudBaseSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof UvSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof RainSensor sensor) {
-        propertyDto = map(sensor);
-      } else if (property instanceof WindSensor sensor) {
-        propertyDto = map(sensor);
-      }
+      DevicePropertyDto propertyDto = mapToDto(property);
       if (propertyDto != null) {
         properties.add(propertyDto);
       }
     }
     return deviceDto;
+  }
+
+  private DevicePropertyDto mapToDto(DeviceProperty deviceProperty) {
+    return switch (deviceProperty) {
+      case Dimmer dimmer -> map(dimmer);
+      case Relay relay -> map(relay);
+      case WindowSensor sensor -> map(sensor);
+      case TemperatureSensor sensor -> map(sensor);
+      case HumiditySensor sensor -> map(sensor);
+      case MotionSensor sensor -> map(sensor);
+      case BatteryStateSensor sensor -> map(sensor);
+      case Roller sensor -> map(sensor);
+      case PowerSensor sensor -> map(sensor);
+      case IlluminanceSensor sensor -> map(sensor);
+      case SmokeSensor sensor -> map(sensor);
+      case Co2Sensor sensor -> map(sensor);
+      case Alarm sensor -> map(sensor);
+      case PressureSensor sensor -> map(sensor);
+      case CloudBaseSensor sensor -> map(sensor);
+      case UvSensor sensor -> map(sensor);
+      case RainSensor sensor -> map(sensor);
+      case WindSensor sensor -> map(sensor);
+      default -> null;
+    };
   }
 
   private RollerPropertyDto map(Roller roller) {

@@ -19,7 +19,7 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device;
 import io.github.davemeier82.homeautomation.core.device.Device;
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
-import io.github.davemeier82.homeautomation.spring.core.DeviceRegistry;
+import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
 import io.github.davemeier82.homeautomation.spring.core.config.device.*;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
@@ -40,21 +40,21 @@ import static java.util.Comparator.comparing;
  */
 public class DeviceApiService {
 
-  private final DeviceRegistry deviceRegistry;
+  private final DeviceRepository deviceRepository;
   private final DeviceToDtoMapper deviceToDtoMapper;
   private final Set<DevicePropertyUpdater> devicePropertyUpdaters;
   private final DeviceConfigFactory deviceConfigFactory;
   private final DeviceLoader deviceLoader;
   private final DeviceConfigWriter deviceConfigWriter;
 
-  public DeviceApiService(DeviceRegistry deviceRegistry,
+  public DeviceApiService(DeviceRepository deviceRepository,
                           DeviceToDtoMapper deviceToDtoMapper,
                           Set<DevicePropertyUpdater> devicePropertyUpdaters,
                           DeviceConfigFactory deviceConfigFactory,
                           DeviceLoader deviceLoader,
                           DeviceConfigWriter deviceConfigWriter
   ) {
-    this.deviceRegistry = deviceRegistry;
+    this.deviceRepository = deviceRepository;
     this.deviceToDtoMapper = deviceToDtoMapper;
     this.devicePropertyUpdaters = devicePropertyUpdaters;
     this.deviceConfigFactory = deviceConfigFactory;
@@ -66,7 +66,7 @@ public class DeviceApiService {
    * @return all devices as DTO
    */
   public List<DeviceDto> getDevices() {
-    return deviceRegistry.getDevices().stream()
+    return deviceRepository.getDevices().stream()
         .sorted(comparing(Device::getId))
         .map(deviceToDtoMapper::map)
         .toList();
@@ -80,7 +80,7 @@ public class DeviceApiService {
    * @param body       the body depends on the property type (see {@link io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater})
    */
   public void updateDevice(DeviceId deviceId, long propertyId, Map<String, Object> body) {
-    DeviceProperty deviceProperty = deviceRegistry.getByDeviceId(deviceId).orElseThrow().getDeviceProperties()
+    DeviceProperty deviceProperty = deviceRepository.getByDeviceId(deviceId).orElseThrow().getDeviceProperties()
         .stream().filter(property -> property.getId() == propertyId)
         .findAny().orElseThrow();
     devicePropertyUpdaters.stream()
@@ -109,7 +109,7 @@ public class DeviceApiService {
    * @param deviceConfig the config of the new device
    */
   public void addDevice(DeviceConfig deviceConfig) {
-    if (deviceRegistry.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).isEmpty()) {
+    if (deviceRepository.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).isEmpty()) {
       deviceLoader.load(deviceConfig);
       deviceConfigWriter.save();
     } else {
@@ -123,7 +123,7 @@ public class DeviceApiService {
    * @param deviceConfig the device config
    */
   public void updateDevice(DeviceConfig deviceConfig) {
-    Device device = deviceRegistry.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).orElseThrow();
+    Device device = deviceRepository.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).orElseThrow();
     device.setCustomIdentifiers(deviceConfig.customIdentifiers());
     device.setDisplayName(deviceConfig.displayName());
     deviceConfigWriter.save();

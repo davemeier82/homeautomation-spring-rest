@@ -16,7 +16,7 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1;
 
-import io.github.davemeier82.homeautomation.spring.core.DeviceRegistry;
+import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
 import io.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreAutoConfiguration;
 import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigFactory;
 import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigWriter;
@@ -55,13 +55,13 @@ public class HomeAutomationRestAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
-  DeviceApiService deviceApiService(DeviceRegistry deviceRegistry,
+  DeviceApiService deviceApiService(DeviceRepository deviceRepository,
                                     DeviceToDtoMapper deviceToDtoMapper,
                                     DeviceConfigFactory deviceConfigFactory,
                                     DeviceLoader deviceLoader,
                                     DeviceConfigWriter deviceConfigWriter
   ) {
-    return new DeviceApiService(deviceRegistry,
+    return new DeviceApiService(deviceRepository,
         deviceToDtoMapper,
         Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater(), new AlarmUpdater()),
         deviceConfigFactory,
