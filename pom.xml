@@ -24,7 +24,7 @@
     </parent>
 
     <artifactId>homeautomation-spring-rest</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
+    <version>0.5.0</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>HomeAutomation Spring REST endpoints</description>
@@ -48,7 +48,7 @@
         <developerConnection>scm:git:ssh://git@github.com/davemeier82/homeautomation-spring-rest.git
         </developerConnection>
         <url>https://github.com/davemeier82/homeautomation-spring-rest</url>
-        <tag>HEAD</tag>
+        <tag>homeautomation-spring-rest-0.5.0</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
