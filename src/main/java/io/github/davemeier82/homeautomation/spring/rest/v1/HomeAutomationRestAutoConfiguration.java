@@ -29,6 +29,7 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.Dimmer
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,12 +50,14 @@ public class HomeAutomationRestAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
+  @ConditionalOnBean(DeviceConfigFactory.class)
   DeviceToDtoMapper deviceToDtoMapper() {
     return new DeviceToDtoMapper();
   }
 
   @Bean
   @ConditionalOnMissingBean
+  @ConditionalOnBean(DeviceConfigFactory.class)
   DeviceApiService deviceApiService(DeviceRepository deviceRepository,
                                     DeviceToDtoMapper deviceToDtoMapper,
                                     DeviceConfigFactory deviceConfigFactory,
@@ -71,6 +74,7 @@ public class HomeAutomationRestAutoConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
+  @ConditionalOnBean(DeviceApiService.class)
   DeviceController deviceController(DeviceApiService deviceApiService) {
     return new DeviceController(deviceApiService);
   }
