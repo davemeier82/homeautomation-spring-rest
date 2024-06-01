@@ -16,116 +16,104 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1.device;
 
-import io.github.davemeier82.homeautomation.core.device.Device;
 import io.github.davemeier82.homeautomation.core.device.DeviceId;
-import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyId;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyType;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyValueType;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyValueTypeFactory;
+import io.github.davemeier82.homeautomation.core.repositories.DevicePropertyRepository;
 import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
-import io.github.davemeier82.homeautomation.spring.core.config.device.*;
+import io.github.davemeier82.homeautomation.spring.core.persistence.repository.JpaLatestDevicePropertyValueRepository;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.AddDeviceDto;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.UpdateDeviceDto;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.mapper.DeviceDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.mapper.DevicePropertyDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.AddDevicePropertyDto;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.UpdateDevicePropertyDto;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.value.UpdateDevicePropertyValueDto;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
-import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toMap;
 
-/**
- * API Service to handle API requests.
- *
- * @author David Meier
- * @since 0.1.0
- */
+@Transactional
 public class DeviceApiService {
 
   private final DeviceRepository deviceRepository;
-  private final DeviceToDtoMapper deviceToDtoMapper;
-  private final Set<DevicePropertyUpdater> devicePropertyUpdaters;
-  private final DeviceConfigFactory deviceConfigFactory;
-  private final DeviceLoader deviceLoader;
-  private final DeviceConfigWriter deviceConfigWriter;
+  private final DeviceDtoMapper deviceDtoMapper;
+  private final Set<DevicePropertyValueTypeFactory> devicePropertyValueTypeFactories;
+  private final DevicePropertyRepository devicePropertyRepository;
+  private final JpaLatestDevicePropertyValueRepository latestDevicePropertyValueRepository;
+  private final DevicePropertyDtoMapper devicePropertyDtoMapper;
+
+  private final Map<DevicePropertyType, DevicePropertyUpdater> devicePropertyUpdaterByType;
 
   public DeviceApiService(DeviceRepository deviceRepository,
-                          DeviceToDtoMapper deviceToDtoMapper,
-                          Set<DevicePropertyUpdater> devicePropertyUpdaters,
-                          DeviceConfigFactory deviceConfigFactory,
-                          DeviceLoader deviceLoader,
-                          DeviceConfigWriter deviceConfigWriter
+                          DeviceDtoMapper deviceDtoMapper,
+                          Set<DevicePropertyValueTypeFactory> devicePropertyValueTypeFactories,
+                          DevicePropertyRepository devicePropertyRepository,
+                          JpaLatestDevicePropertyValueRepository latestDevicePropertyValueRepository,
+                          DevicePropertyDtoMapper devicePropertyDtoMapper,
+                          Set<DevicePropertyUpdater> devicePropertyUpdaters
   ) {
     this.deviceRepository = deviceRepository;
-    this.deviceToDtoMapper = deviceToDtoMapper;
-    this.devicePropertyUpdaters = devicePropertyUpdaters;
-    this.deviceConfigFactory = deviceConfigFactory;
-    this.deviceLoader = deviceLoader;
-    this.deviceConfigWriter = deviceConfigWriter;
+    this.deviceDtoMapper = deviceDtoMapper;
+    this.devicePropertyValueTypeFactories = devicePropertyValueTypeFactories;
+    this.devicePropertyRepository = devicePropertyRepository;
+    this.latestDevicePropertyValueRepository = latestDevicePropertyValueRepository;
+    this.devicePropertyDtoMapper = devicePropertyDtoMapper;
+    devicePropertyUpdaterByType = devicePropertyUpdaters.stream().collect(toMap(DevicePropertyUpdater::getSupportedDevicePropertyType, Function.identity()));
   }
 
   /**
    * @return all devices as DTO
    */
   public List<DeviceDto> getDevices() {
-    return deviceRepository.getDevices().stream()
-        .sorted(comparing(Device::getId))
-        .map(deviceToDtoMapper::map)
-        .toList();
+    return deviceDtoMapper.map(latestDevicePropertyValueRepository.findAll());
   }
 
-  /**
-   * Updates a property of a device.
-   *
-   * @param deviceId   the device id
-   * @param propertyId the device property id
-   * @param body       the body depends on the property type (see {@link io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater})
-   */
-  public void updateDevice(DeviceId deviceId, long propertyId, Map<String, Object> body) {
-    DeviceProperty deviceProperty = deviceRepository.getByDeviceId(deviceId).orElseThrow().getDeviceProperties()
-        .stream().filter(property -> property.getId() == propertyId)
-        .findAny().orElseThrow();
-    devicePropertyUpdaters.stream()
-        .filter(updater -> updater.isSupported(deviceProperty))
-        .forEach(updater -> updater.update(deviceProperty, body));
+  public Optional<DeviceDto> getDevice(DeviceId deviceId) {
+    return deviceRepository.getByDeviceId(deviceId).map(deviceDtoMapper::map);
   }
 
-  /**
-   * @return the config of all devices
-   */
-  public DevicesConfig getDevicesConfig() {
-    return deviceConfigFactory.createDevicesConfig();
+  public void updateDevice(DeviceId deviceId, UpdateDeviceDto updateDeviceDto) {
+    deviceRepository.save(deviceDtoMapper.map(deviceId, updateDeviceDto));
   }
 
-  /**
-   * @param deviceId the identifier of the device
-   * @return the config to the device
-   */
-  public Optional<DeviceConfig> getDeviceConfig(DeviceId deviceId) {
-    return deviceConfigFactory.createDeviceConfig(deviceId);
+  public void addDevice(AddDeviceDto deviceDto) {
+    deviceRepository.save(deviceDtoMapper.map(deviceDto));
   }
 
-  /**
-   * Adds a new device
-   *
-   * @param deviceConfig the config of the new device
-   */
-  public void addDevice(DeviceConfig deviceConfig) {
-    if (deviceRepository.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).isEmpty()) {
-      deviceLoader.load(deviceConfig);
-      deviceConfigWriter.save();
-    } else {
-      throw new IllegalStateException("device with id " + deviceConfig.id() + " and type " + deviceConfig.type() + " already exists");
-    }
+  public void deleteDevice(DeviceId deviceId) {
+    deviceRepository.delete(deviceId);
   }
 
-  /**
-   * Updates the display name and the custom identifiers
-   *
-   * @param deviceConfig the device config
-   */
-  public void updateDevice(DeviceConfig deviceConfig) {
-    Device device = deviceRepository.getByDeviceId(new DeviceId(deviceConfig.id(), deviceConfig.type())).orElseThrow();
-    device.setCustomIdentifiers(deviceConfig.customIdentifiers());
-    device.setDisplayName(deviceConfig.displayName());
-    deviceConfigWriter.save();
+  public void addDeviceProperty(DeviceId deviceId, AddDevicePropertyDto dto) {
+    devicePropertyRepository.save(devicePropertyDtoMapper.map(deviceId, dto));
+  }
+
+  public void updateDeviceProperty(DevicePropertyId devicePropertyId, UpdateDevicePropertyDto dto) {
+    devicePropertyRepository.save(devicePropertyDtoMapper.map(devicePropertyId, dto));
+  }
+
+  public void deleteDeviceProperty(DevicePropertyId devicePropertyId) {
+    devicePropertyRepository.delete(devicePropertyId);
+  }
+
+  public void updateDevicePropertyValue(DevicePropertyId devicePropertyId, String valueType, UpdateDevicePropertyValueDto updateDevicePropertyValueDto) {
+    DevicePropertyValueType devicePropertyValueType = getDevicePropertyValueType(valueType);
+    DevicePropertyUpdater devicePropertyUpdater = devicePropertyUpdaterByType.get(devicePropertyValueType.getDevicePropertyType());
+    devicePropertyUpdater.update(devicePropertyId, updateDevicePropertyValueDto.getValue());
+  }
+
+  private DevicePropertyValueType getDevicePropertyValueType(String valueType) {
+    return devicePropertyValueTypeFactories.stream().map(f -> f.createDevicePropertyValueType(valueType)).filter(Optional::isPresent).map(Optional::get).findAny().orElseThrow();
   }
 }

@@ -16,18 +16,21 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1;
 
+import io.github.davemeier82.homeautomation.core.device.DeviceFactory;
+import io.github.davemeier82.homeautomation.core.device.DeviceTypeMapper;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyFactory;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyTypeFactory;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyValueTypeFactory;
+import io.github.davemeier82.homeautomation.core.repositories.DevicePropertyRepository;
 import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
-import io.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreAutoConfiguration;
-import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigFactory;
-import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceConfigWriter;
-import io.github.davemeier82.homeautomation.spring.core.config.device.DeviceLoader;
+import io.github.davemeier82.homeautomation.spring.core.HomeAutomationCoreDeviceAutoConfiguration;
+import io.github.davemeier82.homeautomation.spring.core.persistence.repository.JpaLatestDevicePropertyValueRepository;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceApiService;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceController;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.mapper.DeviceToDtoMapper;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.AlarmUpdater;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DimmerUpdater;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RelayUpdater;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.RollerUpdater;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.DeviceRestController;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.mapper.DeviceDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.mapper.DevicePropertyDtoMapper;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.DevicePropertyDtoFactory;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.updater.DevicePropertyUpdater;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,47 +39,50 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
-/**
- * Auto configuration.
- *
- * @author David Meier
- * @since 0.1.0
- */
 @Configuration
-@AutoConfigureAfter(HomeAutomationCoreAutoConfiguration.class)
+@AutoConfigureAfter({HomeAutomationCoreDeviceAutoConfiguration.class, HomeAutomationRestDevicePropertyDtoFactoryAutoConfiguration.class})
 public class HomeAutomationRestAutoConfiguration {
 
   public static final String API_PATH = "api/v1/";
 
   @Bean
   @ConditionalOnMissingBean
-  @ConditionalOnBean(DeviceConfigFactory.class)
-  DeviceToDtoMapper deviceToDtoMapper() {
-    return new DeviceToDtoMapper();
-  }
-
-  @Bean
-  @ConditionalOnMissingBean
-  @ConditionalOnBean(DeviceConfigFactory.class)
-  DeviceApiService deviceApiService(DeviceRepository deviceRepository,
-                                    DeviceToDtoMapper deviceToDtoMapper,
-                                    DeviceConfigFactory deviceConfigFactory,
-                                    DeviceLoader deviceLoader,
-                                    DeviceConfigWriter deviceConfigWriter
+  @ConditionalOnBean(DevicePropertyRepository.class)
+  DeviceDtoMapper deviceToDtoMapper(Set<DevicePropertyDtoFactory> devicePropertyDtoFactories,
+                                    DevicePropertyRepository devicePropertyRepository,
+                                    Set<DeviceFactory> deviceFactories,
+                                    DeviceTypeMapper deviceTypeMapper
   ) {
-    return new DeviceApiService(deviceRepository,
-        deviceToDtoMapper,
-        Set.of(new RelayUpdater(), new RollerUpdater(), new DimmerUpdater(), new AlarmUpdater()),
-        deviceConfigFactory,
-        deviceLoader,
-        deviceConfigWriter);
+    return new DeviceDtoMapper(devicePropertyDtoFactories, devicePropertyRepository, deviceFactories, deviceTypeMapper);
   }
 
   @Bean
   @ConditionalOnMissingBean
-  @ConditionalOnBean(DeviceApiService.class)
-  DeviceController deviceController(DeviceApiService deviceApiService) {
-    return new DeviceController(deviceApiService);
+  @ConditionalOnBean({DevicePropertyRepository.class, DevicePropertyTypeFactory.class})
+  DevicePropertyDtoMapper devicePropertyDtoMapper(DevicePropertyFactory devicePropertyFactory, DevicePropertyTypeFactory devicePropertyTypeFactory) {
+    return new DevicePropertyDtoMapper(devicePropertyFactory, devicePropertyTypeFactory);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnBean(DeviceRepository.class)
+  DeviceApiService deviceApiService(DeviceRepository deviceRepository,
+                                    DeviceDtoMapper deviceDtoMapper,
+                                    Set<DevicePropertyValueTypeFactory> devicePropertyValueTypeFactories,
+                                    DevicePropertyRepository devicePropertyRepository,
+                                    JpaLatestDevicePropertyValueRepository latestDevicePropertyValueRepository,
+                                    DevicePropertyDtoMapper devicePropertyDtoMapper,
+                                    Set<DevicePropertyUpdater> devicePropertyUpdaters
+  ) {
+    return new DeviceApiService(deviceRepository, deviceDtoMapper, devicePropertyValueTypeFactories, devicePropertyRepository, latestDevicePropertyValueRepository, devicePropertyDtoMapper,
+        devicePropertyUpdaters);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnBean({DeviceApiService.class, DeviceTypeMapper.class})
+  DeviceRestController deviceController(DeviceApiService deviceApiService, DeviceTypeMapper deviceTypeMapper) {
+    return new DeviceRestController(deviceApiService, deviceTypeMapper);
   }
 
 }

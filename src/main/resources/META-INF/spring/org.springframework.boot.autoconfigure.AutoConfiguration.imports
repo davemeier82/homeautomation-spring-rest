@@ -1,1 +1,3 @@
 io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestAutoConfiguration
+io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestUpdaterAutoConfiguration
+io.github.davemeier82.homeautomation.spring.rest.v1.HomeAutomationRestDevicePropertyDtoFactoryAutoConfiguration

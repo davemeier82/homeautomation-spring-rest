@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2021 the original author or authors.
+ * Copyright 2021-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,7 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1.device.updater;
 
-import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyId;
-import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyType;
+public enum RollerCommands {
 
-public interface DevicePropertyUpdater {
-
-  DevicePropertyType getSupportedDevicePropertyType();
-
-  void update(DevicePropertyId devicePropertyId, Object value);
+  OPEN, CLOSE, STOP
 }

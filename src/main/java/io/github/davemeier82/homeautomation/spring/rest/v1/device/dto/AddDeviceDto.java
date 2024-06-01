@@ -16,31 +16,22 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1.device.dto;
 
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.DevicePropertyDto;
-
-import java.util.List;
 import java.util.Map;
 
-public class DeviceDto {
+public class AddDeviceDto {
 
   private final String type;
   private final String id;
   private final String displayName;
-  private final List<DevicePropertyDto> properties;
+  private final Map<String, String> parameters;
   private final Map<String, String> customIdentifiers;
 
-
-  public DeviceDto(String type,
-                   String id,
-                   String displayName,
-                   List<DevicePropertyDto> properties,
-                   Map<String, String> identifiers
-  ) {
+  public AddDeviceDto(String type, String id, String displayName, Map<String, String> parameters, Map<String, String> customIdentifiers) {
     this.type = type;
     this.id = id;
     this.displayName = displayName;
-    this.properties = properties;
-    customIdentifiers = identifiers;
+    this.parameters = parameters;
+    this.customIdentifiers = customIdentifiers;
   }
 
   public String getType() {
@@ -55,11 +46,11 @@ public class DeviceDto {
     return displayName;
   }
 
-  public List<DevicePropertyDto> getProperties() {
-    return properties;
-  }
-
   public Map<String, String> getCustomIdentifiers() {
     return customIdentifiers;
+  }
+
+  public Map<String, String> getParameters() {
+    return parameters;
   }
 }
