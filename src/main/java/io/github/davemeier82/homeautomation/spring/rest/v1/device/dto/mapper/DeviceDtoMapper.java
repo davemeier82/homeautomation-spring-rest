@@ -68,11 +68,12 @@ public class DeviceDtoMapper {
     Map<DeviceId, String> deviceDisplayNames = new HashMap<>();
     props.values().forEach(e -> {
       DevicePropertyDtoFactory devicePropertyDtoFactory = devicePropertyTypeToDtoFactory.get(e.getFirst().getDevicePropertyType());
+      DeviceType deviceType = deviceTypeMapper.map(e.getFirst().getId().getDeviceType());
+      DeviceId deviceId = new DeviceId(e.getFirst().getId().getDeviceId(), deviceType);
+      deviceDisplayNames.putIfAbsent(deviceId, e.getFirst().getDeviceDisplayName());
+
       if (devicePropertyDtoFactory != null) {
         DevicePropertyDto dto = devicePropertyDtoFactory.map(e);
-        DeviceType deviceType = deviceTypeMapper.map(e.getFirst().getId().getDeviceType());
-        DeviceId deviceId = new DeviceId(e.getFirst().getId().getDeviceId(), deviceType);
-        deviceDisplayNames.putIfAbsent(deviceId, e.getFirst().getDeviceDisplayName());
         ArrayList<DevicePropertyDto> newDtos = new ArrayList<>();
         List<DevicePropertyDto> devicePropertyDtos = properties.putIfAbsent(deviceId, newDtos);
         if (devicePropertyDtos == null) {
@@ -80,15 +81,17 @@ public class DeviceDtoMapper {
         } else {
           devicePropertyDtos.add(dto);
         }
+      } else {
+        ArrayList<DevicePropertyDto> newDtos = new ArrayList<>();
+        properties.putIfAbsent(deviceId, newDtos);
       }
     });
-    List<DeviceDto> deviceDtos = properties.entrySet().stream().map(e -> {
+
+    return properties.entrySet().stream().map(e -> {
       DeviceId deviceId = e.getKey();
       String displayName = deviceDisplayNames.get(deviceId);
       return new DeviceDto(deviceId.type().getTypeName(), deviceId.id(), displayName, e.getValue(), Map.of());
     }).toList();
-
-    return deviceDtos;
   }
 
   public DeviceDto map(Device device) {
