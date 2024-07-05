@@ -18,10 +18,6 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto;
 
 import java.time.OffsetDateTime;
 
-/**
- * @author David Meier
- * @since 0.1.0
- */
 public class RelayPropertyDto extends DevicePropertyDto {
   private final Boolean isOn;
   private final OffsetDateTime lastUpdated;

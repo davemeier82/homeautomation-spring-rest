@@ -18,29 +18,27 @@ package io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto;
 
 import java.time.OffsetDateTime;
 
-public class DimmerPropertyDto extends RelayPropertyDto {
+public class DimmerPropertyDto extends DevicePropertyDto {
   private final Integer dimmingLevelInPercent;
-  private final OffsetDateTime dimmingLevelLastUpdated;
+  private final OffsetDateTime lastUpdated;
 
 
   public DimmerPropertyDto(String id,
                            String type,
                            String displayName,
-                           Boolean isOn,
-                           OffsetDateTime lastUpdated,
                            Integer dimmingLevelInPercent,
-                           OffsetDateTime dimmingLevelLastUpdated
+                           OffsetDateTime lastUpdated
   ) {
-    super(id, type, displayName, isOn, lastUpdated);
+    super(id, type, displayName);
     this.dimmingLevelInPercent = dimmingLevelInPercent;
-    this.dimmingLevelLastUpdated = dimmingLevelLastUpdated;
+    this.lastUpdated = lastUpdated;
   }
 
   public Integer getDimmingLevelInPercent() {
     return dimmingLevelInPercent;
   }
 
-  public OffsetDateTime getDimmingLevelLastUpdated() {
-    return dimmingLevelLastUpdated;
+  public OffsetDateTime getLastUpdated() {
+    return lastUpdated;
   }
 }

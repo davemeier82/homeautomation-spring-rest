@@ -23,6 +23,7 @@ import io.github.davemeier82.homeautomation.core.device.DeviceType;
 import io.github.davemeier82.homeautomation.core.device.DeviceTypeMapper;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
 import io.github.davemeier82.homeautomation.core.repositories.DevicePropertyRepository;
+import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
 import io.github.davemeier82.homeautomation.spring.core.persistence.entity.DevicePropertyId;
 import io.github.davemeier82.homeautomation.spring.core.persistence.entity.LatestDevicePropertyValueEntity;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.AddDeviceDto;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static io.github.davemeier82.homeautomation.core.device.DeviceId.deviceIdFromDevice;
@@ -49,20 +51,24 @@ public class DeviceDtoMapper {
   private final DevicePropertyRepository devicePropertyRepository;
   private final Set<DeviceFactory> deviceFactories;
   private final DeviceTypeMapper deviceTypeMapper;
+  private final DeviceRepository deviceRepository;
 
   public DeviceDtoMapper(Set<DevicePropertyDtoFactory> devicePropertyDtoFactories,
                          DevicePropertyRepository devicePropertyRepository,
                          Set<DeviceFactory> deviceFactories,
-                         DeviceTypeMapper deviceTypeMapper
+                         DeviceTypeMapper deviceTypeMapper,
+                         DeviceRepository deviceRepository
   ) {
     devicePropertyTypeToDtoFactory = devicePropertyDtoFactories.stream().collect(toMap(f -> f.supportedType().getTypeName(), identity()));
     this.devicePropertyRepository = devicePropertyRepository;
     this.deviceFactories = deviceFactories;
     this.deviceTypeMapper = deviceTypeMapper;
+    this.deviceRepository = deviceRepository;
   }
 
   public List<DeviceDto> map(List<LatestDevicePropertyValueEntity> entities) {
     Map<DevicePropertyId, List<LatestDevicePropertyValueEntity>> props = entities.stream().collect(groupingBy(LatestDevicePropertyValueEntity::getId));
+    Map<DeviceId, Map<String, String>> identifiersByDeviceId = deviceRepository.getAllCustomIdentifiers();
 
     Map<DeviceId, List<DevicePropertyDto>> properties = new HashMap<>();
     Map<DeviceId, String> deviceDisplayNames = new HashMap<>();
@@ -90,7 +96,8 @@ public class DeviceDtoMapper {
     return properties.entrySet().stream().map(e -> {
       DeviceId deviceId = e.getKey();
       String displayName = deviceDisplayNames.get(deviceId);
-      return new DeviceDto(deviceId.type().getTypeName(), deviceId.id(), displayName, e.getValue(), Map.of());
+      Map<String, String> identifiers = identifiersByDeviceId.get(deviceId);
+      return new DeviceDto(deviceId.type().getTypeName(), deviceId.id(), displayName, e.getValue(), Objects.requireNonNullElse(identifiers, Map.of()));
     }).toList();
   }
 

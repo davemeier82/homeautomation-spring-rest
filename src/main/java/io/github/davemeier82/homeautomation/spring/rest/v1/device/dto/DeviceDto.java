@@ -28,7 +28,7 @@ public class DeviceDto {
   private final String displayName;
   private final List<DevicePropertyDto> properties;
   private final Map<String, String> customIdentifiers;
-
+  // TODO add parameter map
 
   public DeviceDto(String type,
                    String id,

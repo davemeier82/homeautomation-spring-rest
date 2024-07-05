@@ -51,9 +51,10 @@ public class HomeAutomationRestAutoConfiguration {
   DeviceDtoMapper deviceToDtoMapper(Set<DevicePropertyDtoFactory> devicePropertyDtoFactories,
                                     DevicePropertyRepository devicePropertyRepository,
                                     Set<DeviceFactory> deviceFactories,
-                                    DeviceTypeMapper deviceTypeMapper
+                                    DeviceTypeMapper deviceTypeMapper,
+                                    DeviceRepository deviceRepository
   ) {
-    return new DeviceDtoMapper(devicePropertyDtoFactories, devicePropertyRepository, deviceFactories, deviceTypeMapper);
+    return new DeviceDtoMapper(devicePropertyDtoFactories, devicePropertyRepository, deviceFactories, deviceTypeMapper, deviceRepository);
   }
 
   @Bean

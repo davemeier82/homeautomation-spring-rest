@@ -29,7 +29,6 @@ import java.util.Optional;
 
 import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyType.DIMMER;
 import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyValueType.DIMMING_LEVEL;
-import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyValueType.RELAY_STATE;
 import static io.github.davemeier82.homeautomation.spring.rest.v1.device.property.DataWithTimestampUtil.getTimestampOrNull;
 import static io.github.davemeier82.homeautomation.spring.rest.v1.device.property.DataWithTimestampUtil.getValueOrNull;
 
@@ -48,22 +47,17 @@ public class DimmerDtoFactory implements DevicePropertyDtoFactory {
 
   @Override
   public DevicePropertyDto map(DeviceProperty deviceProperty) {
-    Optional<DataWithTimestamp<Boolean>> isOn = devicePropertyValueRepository.findLatestValue(deviceProperty.getId(), RELAY_STATE, Boolean.class);
     Optional<DataWithTimestamp<Integer>> dimmingLevel = devicePropertyValueRepository.findLatestValue(deviceProperty.getId(), DIMMING_LEVEL, Integer.class);
     return new DimmerPropertyDto(
         deviceProperty.getId().id(),
         deviceProperty.getType().getTypeName(),
         deviceProperty.getDisplayName(),
-        getValueOrNull(isOn),
-        getTimestampOrNull(isOn),
         getValueOrNull(dimmingLevel),
         getTimestampOrNull(dimmingLevel));
   }
 
   @Override
   public DimmerPropertyDto map(List<LatestDevicePropertyValueEntity> entities) {
-    Optional<DataWithTimestamp<Boolean>> isOn = entities.stream().filter(e -> e.getId().getDevicePropertyValueType().equals(RELAY_STATE.getTypeName())).map(p ->
-        new DataWithTimestamp<>(p.getTimestamp(), Boolean.valueOf(p.getValue()))).findFirst();
     Optional<DataWithTimestamp<Integer>> dimmingLevel = entities.stream().filter(e -> e.getId().getDevicePropertyValueType().equals(DIMMING_LEVEL.getTypeName())).map(p ->
         new DataWithTimestamp<>(p.getTimestamp(), Integer.valueOf(p.getValue()))).findFirst();
 
@@ -72,8 +66,6 @@ public class DimmerDtoFactory implements DevicePropertyDtoFactory {
         deviceProperty.getId().getDevicePropertyId(),
         deviceProperty.getDevicePropertyType(),
         deviceProperty.getDevicePropertyDisplayName(),
-        getValueOrNull(isOn),
-        getTimestampOrNull(isOn),
         getValueOrNull(dimmingLevel),
         getTimestampOrNull(dimmingLevel));
   }
