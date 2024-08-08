@@ -22,9 +22,9 @@ import io.github.davemeier82.homeautomation.core.device.DeviceId;
 import io.github.davemeier82.homeautomation.core.device.DeviceType;
 import io.github.davemeier82.homeautomation.core.device.DeviceTypeMapper;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
+import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyId;
 import io.github.davemeier82.homeautomation.core.repositories.DevicePropertyRepository;
 import io.github.davemeier82.homeautomation.core.repositories.DeviceRepository;
-import io.github.davemeier82.homeautomation.spring.core.persistence.entity.DevicePropertyId;
 import io.github.davemeier82.homeautomation.spring.core.persistence.entity.LatestDevicePropertyValueEntity;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.AddDeviceDto;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.dto.DeviceDto;
@@ -67,21 +67,22 @@ public class DeviceDtoMapper {
   }
 
   public List<DeviceDto> map(List<LatestDevicePropertyValueEntity> entities) {
-    Map<DevicePropertyId, List<LatestDevicePropertyValueEntity>> props = entities.stream().collect(groupingBy(LatestDevicePropertyValueEntity::getId));
+    Map<DevicePropertyId, List<LatestDevicePropertyValueEntity>> props = entities.stream().collect(groupingBy(v -> {
+      DeviceType deviceType = deviceTypeMapper.map(v.getId().getDeviceType());
+      return new DevicePropertyId(new DeviceId(v.getId().getDeviceId(), deviceType), v.getId().getDeviceType());
+    }));
     Map<DeviceId, Map<String, String>> identifiersByDeviceId = deviceRepository.getAllCustomIdentifiers();
 
     Map<DeviceId, List<DevicePropertyDto>> properties = new HashMap<>();
     Map<DeviceId, String> deviceDisplayNames = new HashMap<>();
-    props.values().forEach(e -> {
+    props.forEach((dpi, e) -> {
       DevicePropertyDtoFactory devicePropertyDtoFactory = devicePropertyTypeToDtoFactory.get(e.getFirst().getDevicePropertyType());
-      DeviceType deviceType = deviceTypeMapper.map(e.getFirst().getId().getDeviceType());
-      DeviceId deviceId = new DeviceId(e.getFirst().getId().getDeviceId(), deviceType);
-      deviceDisplayNames.putIfAbsent(deviceId, e.getFirst().getDeviceDisplayName());
+      deviceDisplayNames.putIfAbsent(dpi.deviceId(), e.getFirst().getDeviceDisplayName());
 
       if (devicePropertyDtoFactory != null) {
         DevicePropertyDto dto = devicePropertyDtoFactory.map(e);
         ArrayList<DevicePropertyDto> newDtos = new ArrayList<>();
-        List<DevicePropertyDto> devicePropertyDtos = properties.putIfAbsent(deviceId, newDtos);
+        List<DevicePropertyDto> devicePropertyDtos = properties.putIfAbsent(dpi.deviceId(), newDtos);
         if (devicePropertyDtos == null) {
           newDtos.add(dto);
         } else {
@@ -89,7 +90,7 @@ public class DeviceDtoMapper {
         }
       } else {
         ArrayList<DevicePropertyDto> newDtos = new ArrayList<>();
-        properties.putIfAbsent(deviceId, newDtos);
+        properties.putIfAbsent(dpi.deviceId(), newDtos);
       }
     });
 
@@ -104,14 +105,16 @@ public class DeviceDtoMapper {
   public DeviceDto map(Device device) {
     List<DevicePropertyDto> properties = new ArrayList<>();
     DeviceDto deviceDto = new DeviceDto(device.getType().getTypeName(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers());
-    List<DeviceProperty> deviceProperties = devicePropertyRepository.findByDeviceId(deviceIdFromDevice(device));
+    Map<String, List<DeviceProperty>> devicePropertiesById = devicePropertyRepository.findByDeviceId(deviceIdFromDevice(device)).stream().collect(groupingBy(e -> e.getId().id()));
 
-    for (DeviceProperty deviceProperty : deviceProperties) {
+    devicePropertiesById.values().forEach(p -> {
+      DeviceProperty deviceProperty = p.getFirst();
       DevicePropertyDtoFactory devicePropertyDtoFactory = devicePropertyTypeToDtoFactory.get(deviceProperty.getType().getTypeName());
       if (devicePropertyDtoFactory != null) {
         properties.add(devicePropertyDtoFactory.map(deviceProperty));
       }
-    }
+    });
+
     return deviceDto;
   }
 

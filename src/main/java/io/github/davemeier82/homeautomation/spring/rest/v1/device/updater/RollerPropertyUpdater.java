@@ -47,12 +47,16 @@ public class RollerPropertyUpdater implements DevicePropertyUpdater {
   @Override
   public void update(DevicePropertyId devicePropertyId, Object value) {
     RollerDevicePropertyController controller = controllerByDeviceType.get(devicePropertyId.deviceId().type());
-    RollerCommands command = RollerCommands.valueOf(value.toString().toUpperCase());
-    switch (command) {
-      case OPEN -> controller.open(devicePropertyId);
-      case STOP -> controller.stop(devicePropertyId);
-      case CLOSE -> controller.close(devicePropertyId);
-      default -> throw new UnsupportedOperationException(value.toString());
+    if (value instanceof Integer percent) {
+      controller.setPosition(devicePropertyId, percent);
+    } else {
+      RollerCommands command = RollerCommands.valueOf(value.toString().toUpperCase());
+      switch (command) {
+        case OPEN -> controller.open(devicePropertyId);
+        case STOP -> controller.stop(devicePropertyId);
+        case CLOSE -> controller.close(devicePropertyId);
+        default -> throw new UnsupportedOperationException(value.toString());
+      }
     }
   }
 }
