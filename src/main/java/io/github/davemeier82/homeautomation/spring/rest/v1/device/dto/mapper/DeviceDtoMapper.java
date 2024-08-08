@@ -69,7 +69,7 @@ public class DeviceDtoMapper {
   public List<DeviceDto> map(List<LatestDevicePropertyValueEntity> entities) {
     Map<DevicePropertyId, List<LatestDevicePropertyValueEntity>> props = entities.stream().collect(groupingBy(v -> {
       DeviceType deviceType = deviceTypeMapper.map(v.getId().getDeviceType());
-      return new DevicePropertyId(new DeviceId(v.getId().getDeviceId(), deviceType), v.getId().getDeviceType());
+      return new DevicePropertyId(new DeviceId(v.getId().getDeviceId(), deviceType), v.getId().getDevicePropertyId());
     }));
     Map<DeviceId, Map<String, String>> identifiersByDeviceId = deviceRepository.getAllCustomIdentifiers();
 
