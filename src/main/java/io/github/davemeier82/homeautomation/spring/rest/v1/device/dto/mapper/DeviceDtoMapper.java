@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import static io.github.davemeier82.homeautomation.core.device.DeviceId.deviceIdFromDevice;
+import static java.util.Objects.requireNonNullElse;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
@@ -72,6 +72,7 @@ public class DeviceDtoMapper {
       return new DevicePropertyId(new DeviceId(v.getId().getDeviceId(), deviceType), v.getId().getDevicePropertyId());
     }));
     Map<DeviceId, Map<String, String>> identifiersByDeviceId = deviceRepository.getAllCustomIdentifiers();
+    Map<DeviceId, Map<String, String>> parametersByDeviceId = deviceRepository.getAllParameters();
 
     Map<DeviceId, List<DevicePropertyDto>> properties = new HashMap<>();
     Map<DeviceId, String> deviceDisplayNames = new HashMap<>();
@@ -98,13 +99,14 @@ public class DeviceDtoMapper {
       DeviceId deviceId = e.getKey();
       String displayName = deviceDisplayNames.get(deviceId);
       Map<String, String> identifiers = identifiersByDeviceId.get(deviceId);
-      return new DeviceDto(deviceId.type().getTypeName(), deviceId.id(), displayName, e.getValue(), Objects.requireNonNullElse(identifiers, Map.of()));
+      Map<String, String> parameters = parametersByDeviceId.get(deviceId);
+      return new DeviceDto(deviceId.type().getTypeName(), deviceId.id(), displayName, e.getValue(), requireNonNullElse(identifiers, Map.of()), requireNonNullElse(parameters, Map.of()));
     }).toList();
   }
 
   public DeviceDto map(Device device) {
     List<DevicePropertyDto> properties = new ArrayList<>();
-    DeviceDto deviceDto = new DeviceDto(device.getType().getTypeName(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers());
+    DeviceDto deviceDto = new DeviceDto(device.getType().getTypeName(), device.getId(), device.getDisplayName(), properties, device.getCustomIdentifiers(), device.getParameters());
     Map<String, List<DeviceProperty>> devicePropertiesById = devicePropertyRepository.findByDeviceId(deviceIdFromDevice(device)).stream().collect(groupingBy(e -> e.getId().id()));
 
     devicePropertiesById.values().forEach(p -> {

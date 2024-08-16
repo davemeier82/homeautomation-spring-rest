@@ -72,9 +72,6 @@ public class DeviceApiService {
     devicePropertyUpdaterByType = devicePropertyUpdaters.stream().collect(toMap(DevicePropertyUpdater::getSupportedDevicePropertyType, Function.identity()));
   }
 
-  /**
-   * @return all devices as DTO
-   */
   public List<DeviceDto> getDevices() {
     return deviceDtoMapper.map(latestDevicePropertyValueRepository.findAll());
   }

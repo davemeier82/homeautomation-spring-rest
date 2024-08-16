@@ -28,19 +28,20 @@ public class DeviceDto {
   private final String displayName;
   private final List<DevicePropertyDto> properties;
   private final Map<String, String> customIdentifiers;
-  // TODO add parameter map
+  private final Map<String, String> parameters;
 
   public DeviceDto(String type,
                    String id,
                    String displayName,
                    List<DevicePropertyDto> properties,
-                   Map<String, String> identifiers
+                   Map<String, String> identifiers, Map<String, String> parameters
   ) {
     this.type = type;
     this.id = id;
     this.displayName = displayName;
     this.properties = properties;
     customIdentifiers = identifiers;
+    this.parameters = parameters;
   }
 
   public String getType() {
@@ -61,5 +62,9 @@ public class DeviceDto {
 
   public Map<String, String> getCustomIdentifiers() {
     return customIdentifiers;
+  }
+
+  public Map<String, String> getParameters() {
+    return parameters;
   }
 }
