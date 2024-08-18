@@ -55,7 +55,7 @@
         <url>https://github.com/davemeier82/homeautomation-spring-rest/issues</url>
     </issueManagement>
     <properties>
-        <homeautomation-spring-core.version>0.5.2-SNAPSHOT</homeautomation-spring-core.version>
+        <homeautomation-spring-core.version>0.6.0</homeautomation-spring-core.version>
     </properties>
 
     <dependencies>
