@@ -16,70 +16,67 @@
 
 package io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory;
 
-import io.github.davemeier82.homeautomation.core.device.DeviceId;
-import io.github.davemeier82.homeautomation.core.device.DeviceTypeMapper;
 import io.github.davemeier82.homeautomation.core.device.property.DeviceProperty;
-import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyId;
 import io.github.davemeier82.homeautomation.core.device.property.DevicePropertyType;
 import io.github.davemeier82.homeautomation.core.event.DataWithTimestamp;
 import io.github.davemeier82.homeautomation.core.repositories.DevicePropertyValueRepository;
 import io.github.davemeier82.homeautomation.spring.core.persistence.entity.LatestDevicePropertyValueEntity;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.DevicePropertyDto;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.MotionSensorPropertyDto;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.dto.LightningSensorPropertyDto;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyType.MOTION_SENSOR;
-import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyValueType.MOTION_STATE;
+import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyType.LIGHTNING_SENSOR;
+import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyValueType.LIGHTNING_COUNT;
+import static io.github.davemeier82.homeautomation.core.device.property.DefaultDevicePropertyValueType.LIGHTNING_DISTANCE;
 import static io.github.davemeier82.homeautomation.spring.rest.v1.device.property.DataWithTimestampUtil.getTimestampOrNull;
 import static io.github.davemeier82.homeautomation.spring.rest.v1.device.property.DataWithTimestampUtil.getValueOrNull;
 
-public class MotionSensorDtoFactory implements DevicePropertyDtoFactory {
+public class LightningSensorDtoFactory implements DevicePropertyDtoFactory {
 
   private final DevicePropertyValueRepository devicePropertyValueRepository;
-  private final DeviceTypeMapper deviceTypeMapper;
 
-  public MotionSensorDtoFactory(DevicePropertyValueRepository devicePropertyValueRepository, DeviceTypeMapper deviceTypeMapper) {
+  public LightningSensorDtoFactory(DevicePropertyValueRepository devicePropertyValueRepository) {
     this.devicePropertyValueRepository = devicePropertyValueRepository;
-    this.deviceTypeMapper = deviceTypeMapper;
   }
 
   @Override
   public DevicePropertyType supportedType() {
-    return MOTION_SENSOR;
+    return LIGHTNING_SENSOR;
   }
 
   @Override
   public DevicePropertyDto map(DeviceProperty deviceProperty) {
-    Optional<DataWithTimestamp<Boolean>> isOn = devicePropertyValueRepository.findLatestValue(deviceProperty.getId(), MOTION_STATE, Boolean.class);
-    Optional<OffsetDateTime> lastMotion = devicePropertyValueRepository.lastTimeValueMatched(deviceProperty.getId(), MOTION_STATE, Boolean.TRUE);
-    return new MotionSensorPropertyDto(
+    Optional<DataWithTimestamp<Integer>> count = devicePropertyValueRepository.findLatestValue(deviceProperty.getId(), LIGHTNING_COUNT, Integer.class);
+    Optional<DataWithTimestamp<Integer>> distance = devicePropertyValueRepository.findLatestValue(deviceProperty.getId(), LIGHTNING_DISTANCE, Integer.class);
+    return new LightningSensorPropertyDto(
         deviceProperty.getId().id(),
         deviceProperty.getType().getTypeName(),
         deviceProperty.getDisplayName(),
-        getValueOrNull(isOn),
-        lastMotion.orElse(null),
-        getTimestampOrNull(isOn)
+        getValueOrNull(distance),
+        getValueOrNull(count),
+        getTimestampOrNull(distance),
+        getTimestampOrNull(count)
     );
   }
 
   @Override
   public DevicePropertyDto map(List<LatestDevicePropertyValueEntity> entities) {
-    Optional<DataWithTimestamp<Boolean>> isOn = entities.stream().filter(e -> e.getId().getDevicePropertyValueType().equals(MOTION_STATE.getTypeName())).map(p ->
-        new DataWithTimestamp<>(p.getTimestamp(), Boolean.valueOf(p.getValue()))).findFirst();
-    LatestDevicePropertyValueEntity deviceProperty = entities.getFirst();
-    var id = deviceProperty.getId();
-    DevicePropertyId devicePropertyId = new DevicePropertyId(new DeviceId(id.getDeviceId(), deviceTypeMapper.map(id.getDeviceType())), id.getDevicePropertyId());
-    Optional<OffsetDateTime> lastMotion = devicePropertyValueRepository.lastTimeValueMatched(devicePropertyId, MOTION_STATE, Boolean.TRUE);
+    Optional<DataWithTimestamp<Integer>> count = entities.stream().filter(e -> e.getId().getDevicePropertyValueType().equals(LIGHTNING_COUNT.getTypeName())).map(p ->
+        new DataWithTimestamp<>(p.getTimestamp(), Integer.valueOf(p.getValue()))).findFirst();
+    Optional<DataWithTimestamp<Integer>> distance = entities.stream().filter(e -> e.getId().getDevicePropertyValueType().equals(LIGHTNING_DISTANCE.getTypeName())).map(p ->
+        new DataWithTimestamp<>(p.getTimestamp(), Integer.valueOf(p.getValue()))).findFirst();
 
-    return new MotionSensorPropertyDto(
-        id.getDevicePropertyId(),
+    LatestDevicePropertyValueEntity deviceProperty = entities.getFirst();
+    return new LightningSensorPropertyDto(
+        deviceProperty.getId().getDevicePropertyId(),
         deviceProperty.getDevicePropertyType(),
         deviceProperty.getDevicePropertyDisplayName(),
-        getValueOrNull(isOn),
-        lastMotion.orElse(null),
-        getTimestampOrNull(isOn));
+        getValueOrNull(distance),
+        getValueOrNull(count),
+        getTimestampOrNull(distance),
+        getTimestampOrNull(count)
+    );
   }
 }

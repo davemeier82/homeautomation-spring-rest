@@ -26,6 +26,7 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.facto
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.DimmerDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.HumiditySensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.IlluminanceSensorDtoFactory;
+import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.LightningSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.MotionSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.PowerSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.PressureSensorDtoFactory;
@@ -35,7 +36,6 @@ import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.facto
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.SmokeSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.TemperatureSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.UvIndexSensorDtoFactory;
-import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.WindSensorDtoFactory;
 import io.github.davemeier82.homeautomation.spring.rest.v1.device.property.factory.WindowSensorDtoFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -169,8 +169,9 @@ public class HomeAutomationRestDevicePropertyDtoFactoryAutoConfiguration {
   @Bean
   @ConditionalOnBean(DevicePropertyValueRepository.class)
   @ConditionalOnMissingBean
-  WindSensorDtoFactory windSensorDtoFactory(DevicePropertyValueRepository devicePropertyValueRepository) {
-    return new WindSensorDtoFactory(devicePropertyValueRepository);
+  LightningSensorDtoFactory lightningSensorDtoFactory(DevicePropertyValueRepository devicePropertyValueRepository) {
+    return new LightningSensorDtoFactory(devicePropertyValueRepository);
   }
+
 
 }
