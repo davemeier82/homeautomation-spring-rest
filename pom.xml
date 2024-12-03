@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.github.davemeier82.homeautomation</groupId>
         <artifactId>homeautomation-parent</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3</version>
     </parent>
 
     <artifactId>homeautomation-spring-rest</artifactId>
@@ -55,7 +55,7 @@
         <url>https://github.com/davemeier82/homeautomation-spring-rest/issues</url>
     </issueManagement>
     <properties>
-        <homeautomation-spring-core.version>0.6.2</homeautomation-spring-core.version>
+        <homeautomation-spring-core.version>0.6.3</homeautomation-spring-core.version>
     </properties>
 
     <dependencies>
