@@ -13,26 +13,28 @@ Checkout the detailed usage in the Demo: [homeautomation-demo](https://github.co
 
 ```xml
 
-<dependencyManagement>
+<project>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.davemeier82.homeautomation</groupId>
+                <artifactId>homeautomation-bom</artifactId>
+                <version>${homeautomation-bom.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>io.github.davemeier82.homeautomation</groupId>
-            <artifactId>homeautomation-bom</artifactId>
-            <version>${homeautomation-bom.version}</version>
-            <scope>import</scope>
-            <type>pom</type>
+            <artifactId>homeautomation-spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.davemeier82.homeautomation</groupId>
+            <artifactId>homeautomation-spring-rest</artifactId>
         </dependency>
     </dependencies>
-</dependencyManagement>
-
-<dependencies>
-<dependency>
-    <groupId>io.github.davemeier82.homeautomation</groupId>
-    <artifactId>homeautomation-spring-core</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.github.davemeier82.homeautomation</groupId>
-    <artifactId>homeautomation-spring-rest</artifactId>
-</dependency>
-</dependencies>
+</project>
 ```
